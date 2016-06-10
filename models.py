@@ -13,7 +13,7 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.Unicode(length=128), unique=True)
     email = db.Column(db.Unicode(length=128), unique=True)
-    _password = db.Column('password', db.Unicode(length=60))  # password hash
+    _password = db.Column('password', db.String(length=60))  # password hash
 
     def __eq__(self, other):
         if isinstance(other, User):
