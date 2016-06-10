@@ -1,0 +1,12 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Event List
+{% endblock %}
+
+{% block content %}
+    {% for event in events %}
+        <b>{{ event.title }}</b> {{ event.owner.username }} {{ event.description }} <a href="{{ event.link }}">link</a>
+        <br />
+    {% endfor %}
+{% endblock %}

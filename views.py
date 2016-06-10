@@ -1,12 +1,14 @@
 from flask import Blueprint, redirect, render_template, url_for
-from flask_login import login_required, login_user, logout_user
+from flask_login import current_user, login_required, login_user, logout_user
+from sqlalchemy import desc
 
 from cal import db
-from forms import LoginForm, RegisterForm
-from models import login_manager, User
+from forms import EventCreateForm, LoginForm, RegisterForm
+from models import login_manager, Event, User
 
 blueprint_base = Blueprint('base', __name__, template_folder='templates')
 blueprint_users = Blueprint('users', __name__, template_folder='templates')
+blueprint_events = Blueprint('events', __name__, template_folder='templates')
 
 
 @blueprint_base.route("/")
@@ -51,3 +53,26 @@ def logout():
 @login_required
 def profile():
     return render_template('users/profile.html')
+
+
+@blueprint_events.route('/create', methods=['GET', 'POST'])
+@login_required
+def events_create():
+    event_create_form = EventCreateForm()
+    if event_create_form.validate_on_submit():
+        new_event = Event(owner=current_user,
+                          title=event_create_form.title.data,
+                          start_time=event_create_form.start_time.data,
+                          duration=event_create_form.duration.data,
+                          description=event_create_form.description.data,
+                          link=event_create_form.link.data)
+        db.session.add(new_event)
+        db.session.commit()
+        return redirect(url_for('.events_list'))
+    return render_template('events/create.html', event_create_form=event_create_form)
+
+
+@blueprint_events.route('/list')
+def events_list():
+    events = Event.query.filter_by(approved=True).order_by(Event.start_time).all()
+    return render_template('events/list.html', events=events)

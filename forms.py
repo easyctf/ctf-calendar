@@ -1,5 +1,5 @@
 from flask_wtf import Form
-from wtforms import PasswordField, StringField, ValidationError
+from wtforms import DateTimeField, FloatField, PasswordField, StringField, ValidationError
 from wtforms.validators import InputRequired, Length
 from wtforms.widgets import TextArea
 
@@ -38,3 +38,15 @@ class RegisterForm(Form):
     def validate_username(self, field):
         if not util.validate_username_format(field.data):
             raise ValidationError('Invalid username')
+
+
+class EventCreateForm(Form):
+    title = StringField('Title', validators=[InputRequired(), Length(max=256)])
+    start_time = DateTimeField('Start Time', validators=[InputRequired()])
+    duration = FloatField('Duration (hours)', validators=[InputRequired()])
+    description = StringField('Description', widget=TextArea(), validators=[InputRequired(), Length(max=1024)])
+    link = StringField('Link', validators=[InputRequired(), Length(max=256)])
+
+    def validate_link(self, field):
+        if not any(field.data.startswith(prefix) for prefix in [u'http://', u'https://']):
+            raise ValidationError('Invalid link')
