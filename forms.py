@@ -1,6 +1,7 @@
 from flask_wtf import Form
 from wtforms import PasswordField, StringField, ValidationError
 from wtforms.validators import InputRequired, Length
+from wtforms.widgets import TextArea
 
 import util
 from models import User
@@ -27,8 +28,8 @@ class LoginForm(Form):
 
 class RegisterForm(Form):
     email = StringField('Email', validators=[InputRequired()])
-    username = StringField('Username', validators=[InputRequired(), Length(min=4)])
-    password = PasswordField('Password', validators=[InputRequired(), Length(min=8)])
+    username = StringField('Username', validators=[InputRequired(), Length(min=4, max=128)])
+    password = PasswordField('Password', validators=[InputRequired(), Length(min=8, max=56)])
 
     def validate_email(self, field):
         if not util.validate_email_format(field.data):
