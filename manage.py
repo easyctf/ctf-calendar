@@ -1,5 +1,5 @@
 from flask_migrate import Migrate, MigrateCommand
-from flask_script import Command, Manager, Server
+from flask_script import Manager, Server
 
 from cal import app, db
 
@@ -12,4 +12,4 @@ server_command = Server(host='0.0.0.0', port=5000, use_debugger=True, use_reload
 manager.add_command('runserver', server_command)
 
 if __name__ == '__main__':
-	manager.run()
+    manager.run()
