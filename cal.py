@@ -1,7 +1,6 @@
 import os
 
 from flask import Flask, render_template
-from flask_runner import Runner
 from flask_sqlalchemy import SQLAlchemy
 
 import config
