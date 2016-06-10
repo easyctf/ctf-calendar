@@ -73,7 +73,7 @@ def events_create():
     return render_template('events/create.html', event_create_form=event_create_form)
 
 
-@blueprint_events.route('/list')
+@blueprint_events.route('/')
 def events_list():
     events = Event.query.filter_by(approved=True).order_by(desc(Event.start_time)).all()
     return render_template('events/list.html', events=events)
