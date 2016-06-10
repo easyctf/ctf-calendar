@@ -1,9 +1,9 @@
 alembic
 Flask
-Flask-runner
 Flask-SQLAlchemy
 gunicorn
 pathlib
 pymysql
 sqlalchemy
 Flask-Migrate
+jinja2
