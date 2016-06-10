@@ -79,8 +79,12 @@ class User(db.Model):
 class Event(db.Model):
     __tablename__ = 'events'
     id = db.Column(db.Integer, primary_key=True)
-    owner = db.Column(db.Integer, db.ForeignKey('users.id'), index=True)
+    owner_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    owner = db.relationship('User', backref='events')
+    approved = db.Column(db.Boolean, default=False)
     title = db.Column(db.Unicode(length=256))
+    start_time = db.Column(db.DateTime, index=True)
+    duration = db.Column(db.Float)
     description = db.Column(db.UnicodeText)
     link = db.Column(db.Unicode(length=256))
 
