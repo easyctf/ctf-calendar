@@ -23,5 +23,5 @@ source /etc/profile
 sudo sed -i s/127.0.0.1/0.0.0.0/ /etc/mysql/my.cnf
 sudo service mysql restart
 mysql -u root -p"$MYSQL_ROOT_PASSWORD" <<EOF
-CREATE DATABASE easyctf-cal;
+CREATE DATABASE easyctf_cal;
 EOF
