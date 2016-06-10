@@ -21,6 +21,7 @@ class User(db.Model):
         return NotImplemented
 
     '''Python 3 implicitly sets __hash__ to None if __eq__ is overridden. Set back to default implementation.'''
+
     def __hash__(self):
         return object.__hash__(self)
 

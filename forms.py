@@ -1,9 +1,9 @@
 from flask_wtf import Form
-from wtforms import PasswordField, StringField, SubmitField, ValidationError
+from wtforms import PasswordField, StringField, ValidationError
 from wtforms.validators import InputRequired, Length
 
-from models import User
 import util
+from models import User
 
 
 class LoginForm(Form):

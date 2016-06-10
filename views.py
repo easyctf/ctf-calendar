@@ -1,5 +1,4 @@
 from flask import Blueprint, redirect, render_template, url_for
-import flask_login
 from flask_login import login_required, login_user, logout_user
 
 from cal import db
@@ -22,6 +21,7 @@ def login():
         return redirect(
             url_for('.profile'))  # TODO: implement safe redirection based on url value for login and register
     return render_template('login.html', login_form=login_form)
+
 
 login_manager.login_view = '/login'
 

@@ -1,7 +1,6 @@
 import os
 
-from flask import Flask, render_template
-from flask_sqlalchemy import SQLAlchemy
+from flask import Flask
 
 import config
 from models import db, login_manager

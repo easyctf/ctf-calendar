@@ -1,5 +1,6 @@
-from passlib.hash import bcrypt
 import re
+
+from passlib.hash import bcrypt
 
 
 def hash_password(password, rounds=10):

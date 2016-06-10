@@ -1,4 +1,3 @@
-import flask_login
 from flask_migrate import Migrate, MigrateCommand
 from flask_script import Manager, Server
 
