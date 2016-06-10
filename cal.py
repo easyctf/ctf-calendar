@@ -1,10 +1,9 @@
 from flask import Flask, render_template
-from flask_sqlalchemy import SQLAlchemy
+from flask.ext.sqlalchemy import SQLAlchemy
 app = Flask(__name__)
 
 app = Flask(__name__)
 db = SQLAlchemy(app)
-runner = Runner(app)
 
 @app.route("/")
 def index():

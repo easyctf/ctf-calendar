@@ -1,4 +1,4 @@
 Flask
-Flask-runner
+Flask-SQLAlchemy
 gunicorn
 jinja2
