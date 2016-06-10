@@ -79,6 +79,7 @@ class User(db.Model):
 class Event(db.Model):
     __tablename__ = 'events'
     id = db.Column(db.Integer, primary_key=True)
+    owner = db.Column(db.Integer, db.ForeignKey('users.id'), index=True)
     title = db.Column(db.Unicode(length=256))
     description = db.Column(db.UnicodeText)
     link = db.Column(db.Unicode(length=256))
