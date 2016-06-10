@@ -14,6 +14,7 @@ class User(db.Model):
     username = db.Column(db.Unicode(length=128), unique=True)
     email = db.Column(db.Unicode(length=128), unique=True)
     _password = db.Column('password', db.String(length=60))  # password hash
+    admin = db.Column(db.Boolean, default=False)
 
     def __eq__(self, other):
         if isinstance(other, User):

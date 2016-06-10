@@ -1,10 +1,11 @@
-from flask import Blueprint, redirect, render_template, url_for
+from flask import Blueprint, flash, redirect, render_template, url_for
 from flask_login import current_user, login_required, login_user, logout_user
 from sqlalchemy import desc
 
 from cal import db
 from forms import EventCreateForm, LoginForm, RegisterForm
 from models import login_manager, Event, User
+from util import admin_required
 
 blueprint_base = Blueprint('base', __name__, template_folder='templates')
 blueprint_users = Blueprint('users', __name__, template_folder='templates')
@@ -76,3 +77,23 @@ def events_create():
 def events_list():
     events = Event.query.filter_by(approved=True).order_by(Event.start_time).all()
     return render_template('events/list.html', events=events)
+
+
+@blueprint_events.route('/unapproved')
+@admin_required
+def events_unapproved():
+    unapproved_events = Event.query.filter_by(approved=False).order_by(Event.start_time).all()
+    return render_template('events/list.html', events=unapproved_events, enabled_actions=['approve'])
+
+
+@blueprint_events.route('/<int:event_id>/approve', methods=['POST'])
+@admin_required
+def events_approve(event_id):
+    event = Event.query.get_or_404(event_id)
+    if event.approved:
+        flash("Event %d already approved!" % event_id)
+    else:
+        event.approved = True
+        db.session.commit()
+        flash("Event %d approved!" % event_id)
+    return redirect(url_for('.events_unapproved'))
