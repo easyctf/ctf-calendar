@@ -1,3 +1,5 @@
 *.pyc
 .vagrant
 .idea
+MYSQL_ROOT_PASSWORD
+.secret_key
