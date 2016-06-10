@@ -1,0 +1,25 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Event List
+{% endblock %}
+
+{% block content %}
+    {% for event in events %}
+        <div id="event_{{ event.id }}">
+            <b>{{ event.title }}</b> {{ event.owner.username }} {{ event.description }} <a
+                href="{{ event.link }}">link</a>
+            {% if enabled_actions %}
+                <form>
+                    {% if 'approve' in enabled_actions %}
+                        <button id="approve_{{ event.id }}" type="submit"
+                                formaction="{{ url_for('events.events_approve', event_id=event.id) }}"
+                                formmethod="post">Approve
+                        </button>
+                    {% endif %}
+                </form>
+            {% endif %}
+            <br/>
+        </div>
+    {% endfor %}
+{% endblock %}

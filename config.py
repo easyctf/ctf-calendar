@@ -1,7 +1,6 @@
 import os
 import pathlib
 
-
 class CalendarConfig:
     def __init__(self, app_root=None, testing=False):
         if app_root is None:
@@ -11,7 +10,7 @@ class CalendarConfig:
 
         self.SECRET_KEY = None
         self._load_secret_key()
-        self.SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://root:%s@localhost/cal' % self.get_mysql_password()
+        self.SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://root:%s@localhost/easyctf_cal' % self.get_mysql_password()
         self.SQLALCHEMY_TRACK_MODIFICATIONS = False
 
         if testing:
