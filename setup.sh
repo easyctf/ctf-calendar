@@ -15,7 +15,7 @@ sudo apt-get install -y libffi=3.1~rc1+r3.0.13-12ubuntu0.1
 sudo apt-get install -y mysql-server
 
 echo "Installing pip dependencies..."
-sudo pip3 install -r /vagrant/requirements.txt
+sudo pip2 install -r /vagrant/requirements.txt
 
 echo "PATH=$PATH:/vagrant" >> /etc/profile
 source /etc/profile
