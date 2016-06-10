@@ -75,14 +75,14 @@ def events_create():
 
 @blueprint_events.route('/list')
 def events_list():
-    events = Event.query.filter_by(approved=True).order_by(Event.start_time).all()
+    events = Event.query.filter_by(approved=True).order_by(desc(Event.start_time)).all()
     return render_template('events/list.html', events=events)
 
 
 @blueprint_events.route('/unapproved')
 @admin_required
 def events_unapproved():
-    unapproved_events = Event.query.filter_by(approved=False).order_by(Event.start_time).all()
+    unapproved_events = Event.query.filter_by(approved=False).order_by(desc(Event.start_time)).all()
     return render_template('events/list.html', events=unapproved_events, enabled_actions=['approve'])
 
 
