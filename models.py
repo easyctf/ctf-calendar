@@ -82,3 +82,11 @@ class Event(db.Model):
     title = db.Column(db.Unicode(length=256))
     description = db.Column(db.UnicodeText)
     link = db.Column(db.Unicode(length=256))
+
+
+class EventVote(db.Model):
+    __tablename__ = 'eventvotes'
+    id = db.Column(db.Integer, primary_key=True)
+    event_id = db.Column(db.Integer, db.ForeignKey('events.id'), index=True)
+    event = db.relationship('Event', backref='votes')
+    direction = db.Column(db.Boolean)
