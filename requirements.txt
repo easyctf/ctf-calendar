@@ -1,10 +1,15 @@
 alembic
+bcrypt
 Flask
+Flask-Login
+Flask-Migrate
 Flask-Script
 Flask-SQLAlchemy
+Flask-WTF
 gunicorn
+jinja2
+passlib
 pathlib
 pymysql
 sqlalchemy
-Flask-Migrate
-jinja2
+wtforms

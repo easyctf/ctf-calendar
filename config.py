@@ -12,7 +12,7 @@ class CalendarConfig:
 
         self.SECRET_KEY = None
         self._load_secret_key()
-        self.SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://root:%s@localhost/eductf' % self.get_mysql_password()
+        self.SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://root:%s@localhost/easyctf-cal' % self.get_mysql_password()
         self.SQLALCHEMY_TRACK_MODIFICATIONS = False
 
         if testing:
