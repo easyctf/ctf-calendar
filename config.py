@@ -12,7 +12,7 @@ class CalendarConfig:
 
         self.SECRET_KEY = None
         self._load_secret_key()
-        self.SQLALCHEMY_DATABASE_URI = self.get_mysql_url()
+        self.SQLALCHEMY_DATABASE_URI = self._get_database_url()
         self.SQLALCHEMY_TRACK_MODIFICATIONS = False
 
         if testing:
@@ -34,7 +34,7 @@ class CalendarConfig:
 
         return self.SECRET_KEY
 
-    def get_mysql_url(self):
+    def _get_database_url(self):
         from dotenv import load_dotenv, find_dotenv
         load_dotenv(find_dotenv())
         return os.getenv("DATABASE_URL", "")
