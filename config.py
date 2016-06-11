@@ -35,4 +35,4 @@ class CalendarConfig:
     def get_mysql_url(self):
         from dotenv import load_dotenv, find_dotenv
         load_dotenv(find_dotenv())
-        return os.getenv("MYSQL_URL", "")
+        return os.getenv("DATABASE_URL", "")
