@@ -1,4 +1,5 @@
 from datetime import datetime
+
 from flask_wtf import Form
 from wtforms import DateTimeField, FloatField, PasswordField, StringField, ValidationError
 from wtforms.validators import InputRequired, Length
@@ -39,6 +40,8 @@ class RegisterForm(Form):
     def validate_username(self, field):
         if not util.validate_username_format(field.data):
             raise ValidationError('Invalid username')
+        if User.query.filter_by(username=field.data).count():
+            raise ValidationError('Username taken!')
 
 
 class EventCreateForm(Form):

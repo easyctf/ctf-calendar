@@ -2,8 +2,8 @@ from flask import Blueprint, flash, redirect, render_template, url_for
 from flask_login import current_user, login_required, login_user, logout_user
 from sqlalchemy import desc
 
-from models import db
 from forms import EventCreateForm, LoginForm, RegisterForm
+from models import db
 from models import login_manager, Event, User
 from util import admin_required
 
@@ -20,6 +20,7 @@ def index():
 @blueprint_base.app_errorhandler(404)
 def error_404(e):
     return render_template('base/404.html'), 404
+
 
 @blueprint_users.route('/login', methods=['GET', 'POST'])
 def login():

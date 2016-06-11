@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block content %}
-    <b>u gotta wait for mod approval</b><br />
+    <b>u gotta wait for mod approval</b><br/>
     <form method="post">
         {{ event_create_form.csrf_token }}
         {% for field in event_create_form if field.id != 'csrf_token' %}
@@ -14,7 +14,7 @@
                 <ul class="errors">{% for error in field.errors %}
                     <li>{{ error }}</li>{% endfor %}</ul>
             {% endif %}
-            <br />
+            <br/>
         {% endfor %}
         <input type="submit" value="Submit">
     </form>

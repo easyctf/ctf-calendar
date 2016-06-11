@@ -1,1 +1,1 @@
-web: gunicorn cal:app --log-file -
+web: python manage.py upgrade && gunicorn cal:app --log-file -
