@@ -18,9 +18,9 @@
         </div>
     </div>
 
-    <script type="text/javascript" src="/js/dragscroll.js"></script>
-    <script type="text/javascript" src="/js/jquery.infinitescroll.min.js"></script>
-    <script type="text/javascript" src="/js/timeline.js"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='/js/dragscroll.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='/js/jquery.infinitescroll.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='/js/timeline.js') }}"></script>
 {% endblock %}
 
 {% block sidebar %}

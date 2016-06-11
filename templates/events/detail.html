@@ -7,6 +7,10 @@
 {% block content %}
     <b>{{ event.title }}</b> by {{ event.owner.username }}
     <br/>
+    Start: {{ event.start_time }}
+    <br/>
+    Duration: {{ event.duration }}
+    <br/>
     Link: <a href="{{ event.link }}">link</a>
     <br/>
     <p>
