@@ -80,7 +80,7 @@ class User(db.Model):
 class Event(db.Model):
     __tablename__ = 'events'
     id = db.Column(db.Integer, primary_key=True)
-    owner_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    owner_id = db.Column(db.Integer, db.ForeignKey('users.id', name='event_owner_id_fk'))
     owner = db.relationship('User', backref='events')
     approved = db.Column(db.Boolean, default=False)
     title = db.Column(db.Unicode(length=256))
@@ -93,6 +93,6 @@ class Event(db.Model):
 class EventVote(db.Model):
     __tablename__ = 'eventvotes'
     id = db.Column(db.Integer, primary_key=True)
-    event_id = db.Column(db.Integer, db.ForeignKey('events.id'), index=True)
+    event_id = db.Column(db.Integer, db.ForeignKey('events.id', name='vote_event_id_fk'), index=True)
     event = db.relationship('Event', backref='votes')
     direction = db.Column(db.Boolean)
