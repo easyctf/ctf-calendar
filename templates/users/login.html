@@ -14,7 +14,20 @@
                 <div class="panel-body">
                     <form class="form-horizontal" method="POST" id="login_form">
                         {{ login_form.csrf_token }}
-                        {{ login_form.errors }}
+                        {% if login_form.errors %}
+                            <div class="alert alert-danger">
+                                <ul>
+                                    Please correct the following errors.
+                                    {% for field in login_form %}
+                                        {% if field.errors %}
+                                            {% for error in field.errors %}
+                                                <li>{{ error }}</li>
+                                            {% endfor %}
+                                        {% endif %}
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        {% endif %}
                         <fieldset>
                             <div id="login_msg"></div>
                         </fieldset>
@@ -45,15 +58,4 @@
             </div>
         </div>
     </div>
-    <form method="post">
-        {% for field in login_form if field.id != 'csrf_token' %}
-            {{ field.label }} {{ field() }}
-            {% if field.errors %}
-                <ul class="errors">{% for error in field.errors %}
-                    <li class="text-danger">{{ error }}</li>{% endfor %}</ul>
-            {% endif %}
-            <br />
-        {% endfor %}
-        <input type="submit" value="Login">
-    </form>
 {% endblock %}
