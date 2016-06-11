@@ -36,6 +36,8 @@ class RegisterForm(Form):
     def validate_email(self, field):
         if not util.validate_email_format(field.data):
             raise ValidationError('Invalid email')
+        if User.query.filter_by(email=field.data).count():
+            raise ValidationError('Email taken!')
 
     def validate_username(self, field):
         if not util.validate_username_format(field.data):
