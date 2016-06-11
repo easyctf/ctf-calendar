@@ -57,16 +57,4 @@
             </div>
         </div>
     </div>
-    <form method="post">
-        {{ register_form.csrf_token }}
-        {% for field in register_form if field.id != 'csrf_token' %}
-            {{ field.label }} {{ field() }}
-            {% if field.errors %}
-                <ul class="errors">{% for error in field.errors %}
-                    <li>{{ error }}</li>{% endfor %}</ul>
-            {% endif %}
-            <br/>
-        {% endfor %}
-        <input type="submit" value="Register">
-    </form>
 {% endblock %}
