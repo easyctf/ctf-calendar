@@ -23,5 +23,4 @@ $ python manage.py runserver
 Copyright and License
 ------
 
-Copyright 2016 by the EasyCTF team.
-plz no copy
+[Copyright 2016](LICENSE.md) by the EasyCTF team.

@@ -10,6 +10,7 @@ gunicorn
 jinja2
 passlib
 pathlib
+psycopg2
 pymysql
 sqlalchemy
 wtforms

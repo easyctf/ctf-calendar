@@ -2,7 +2,7 @@ from flask import Blueprint, flash, redirect, render_template, url_for
 from flask_login import current_user, login_required, login_user, logout_user
 from sqlalchemy import desc
 
-from cal import db
+from models import db
 from forms import EventCreateForm, LoginForm, RegisterForm
 from models import login_manager, Event, User
 from util import admin_required

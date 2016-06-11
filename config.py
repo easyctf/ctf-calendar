@@ -10,7 +10,7 @@ class CalendarConfig:
 
         self.SECRET_KEY = None
         self._load_secret_key()
-        self.SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://root:%s@localhost/easyctf_cal' % self.get_mysql_password()
+        self.SQLALCHEMY_DATABASE_URI = 'postgres://%s@ec2-54-227-240-164.compute-1.amazonaws.com:5432/d1djopap6unmlm' % self.get_mysql_credentials()    
         self.SQLALCHEMY_TRACK_MODIFICATIONS = False
 
         if testing:
@@ -32,8 +32,8 @@ class CalendarConfig:
 
         return self.SECRET_KEY
 
-    def get_mysql_password(self):
-        password_path = self.app_root / 'MYSQL_ROOT_PASSWORD'
+    def get_mysql_credentials(self):
+        password_path = self.app_root / 'MYSQL_SECRET'
         if password_path.is_file():
             with password_path.open('r') as password_file:
                 password = password_file.read().strip()
