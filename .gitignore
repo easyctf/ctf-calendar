@@ -1,5 +1,5 @@
 *.pyc
 .vagrant
 .idea
-MYSQL_SECRET
+.env
 .secret_key

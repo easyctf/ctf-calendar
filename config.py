@@ -33,10 +33,6 @@ class CalendarConfig:
         return self.SECRET_KEY
 
     def get_mysql_url(self):
-        password_path = self.app_root / 'MYSQL_SECRET'
-        if password_path.is_file():
-            with password_path.open('r') as password_file:
-                password = password_file.read().strip()
-        else:
-            password = ''
-        return password
+        from dotenv import load_dotenv, find_dotenv
+        load_dotenv(find_dotenv())
+        return os.getenv("MYSQL_URL", "")

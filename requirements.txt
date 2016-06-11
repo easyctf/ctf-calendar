@@ -12,5 +12,6 @@ passlib
 pathlib
 psycopg2
 pymysql
+python-dotenv
 sqlalchemy
 wtforms
