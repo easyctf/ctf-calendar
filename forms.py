@@ -1,3 +1,4 @@
+from datetime import datetime
 from flask_wtf import Form
 from wtforms import DateTimeField, FloatField, PasswordField, StringField, ValidationError
 from wtforms.validators import InputRequired, Length
@@ -42,7 +43,7 @@ class RegisterForm(Form):
 
 class EventCreateForm(Form):
     title = StringField('Title', validators=[InputRequired(), Length(max=256)])
-    start_time = DateTimeField('Start Time', validators=[InputRequired()])
+    start_time = DateTimeField('Start Time', validators=[InputRequired()], default=datetime.utcfromtimestamp(0))
     duration = FloatField('Duration (hours)', validators=[InputRequired()])
     description = StringField('Description', widget=TextArea(), validators=[InputRequired(), Length(max=1024)])
     link = StringField('Link', validators=[InputRequired(), Length(max=256)])
