@@ -11,9 +11,9 @@
             {{ field.label }} {{ field() }}
             {% if field.errors %}
                 <ul class="errors">{% for error in field.errors %}
-                    <li>{{ error }}</li>{% endfor %}</ul>
+                    <li class="text-danger">{{ error }}</li>{% endfor %}</ul>
             {% endif %}
-            <br/>
+            <br />
         {% endfor %}
         <input type="submit" value="Login">
     </form>

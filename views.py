@@ -7,6 +7,9 @@ from models import db
 from models import login_manager, Event, User
 from util import admin_required
 
+import json
+import time
+
 blueprint_base = Blueprint('base', __name__, template_folder='templates')
 blueprint_users = Blueprint('users', __name__, template_folder='templates')
 blueprint_events = Blueprint('events', __name__, template_folder='templates')
@@ -82,6 +85,23 @@ def events_create():
 def events_list():
     events = Event.query.filter_by(approved=True).order_by(desc(Event.start_time)).all()
     return render_template('events/list.html', events=events)
+
+
+@blueprint_events.route('/list/json')
+def events_list_json():
+    events = Event.query.filter_by().order_by(desc(Event.start_time)).all()
+    event_list = []
+    for event in events:
+        start_time = int(event.start_time.strftime("%s"))
+        obj = {
+            "id": event.id,
+            "name": event.title,
+            "startTime": start_time * 1000,
+            "endTime": (start_time + event.duration * 60 * 60) * 1000,
+            "duration": event.duration
+        }
+        event_list.append(obj)
+    return json.dumps(event_list)
 
 
 @blueprint_events.route('/unapproved')

@@ -6,7 +6,7 @@ import config
 from models import db, login_manager
 from views import blueprint_base, blueprint_events, blueprint_users
 
-app = Flask(__name__)
+app = Flask(__name__, static_url_path='')
 self_path = os.path.dirname(os.path.abspath(__file__))
 app.config.from_object(config.CalendarConfig(app_root=self_path))
 db.init_app(app)
