@@ -91,6 +91,12 @@ def events_unapproved():
     return render_template('events/list.html', events=unapproved_events, enabled_actions=['approve'])
 
 
+@blueprint_events.route('/<int:event_id>')
+def events_detail(event_id):
+    event = Event.query.get_or_404(event_id)
+    return render_template('events/detail.html', event=event)
+
+
 @blueprint_events.route('/<int:event_id>/approve', methods=['POST'])
 @admin_required
 def events_approve(event_id):

@@ -7,8 +7,9 @@
 {% block content %}
     {% for event in events %}
         <div id="event_{{ event.id }}">
-            <b>{{ event.title }}</b> {{ event.owner.username }} {{ event.description }} <a
-                href="{{ event.link }}">link</a>
+            <b><a href="{{ url_for('events.events_detail', event_id=event.id) }}">{{ event.title }}</a></b>
+            {{ event.owner.username }} {{ event.description }}
+            <a href="{{ event.link }}">link</a>
             {% if enabled_actions %}
                 <form>
                     {% if 'approve' in enabled_actions %}

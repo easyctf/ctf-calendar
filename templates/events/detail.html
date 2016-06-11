@@ -1,0 +1,15 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    event.title
+{% endblock %}
+
+{% block content %}
+    <b>{{ event.title }}</b> by {{ event.owner.username }}
+    <br/>
+    Link: <a href="{{ event.link }}">link</a>
+    <br/>
+    <p>
+        {{ event.description }}
+    </p>
+{% endblock %}
