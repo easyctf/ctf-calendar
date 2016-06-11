@@ -1,6 +1,9 @@
 import os
 
 import pathlib
+from dotenv import load_dotenv, find_dotenv
+
+load_dotenv(find_dotenv())
 
 
 class CalendarConfig:
@@ -35,6 +38,4 @@ class CalendarConfig:
         return self.SECRET_KEY
 
     def _get_database_url(self):
-        from dotenv import load_dotenv, find_dotenv
-        load_dotenv(find_dotenv())
         return os.getenv("DATABASE_URL", "")
