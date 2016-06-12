@@ -3,7 +3,7 @@ import json
 from flask import Blueprint, redirect, render_template, url_for, flash
 from flask_login import current_user, login_required
 
-from forms import EventForm
+from forms import EventForm, EventUpdateForm
 from models import db, Event
 from util import admin_required, isoformat
 
@@ -113,16 +113,8 @@ def events_approve(event_id):
 @login_required
 def events_manage(event_id):
     event = Event.query.get_or_404(event_id)
-    event_manage_form = EventForm()
+    event_manage_form = EventUpdateForm(obj=event)
     if event_manage_form.validate_on_submit():
-        '''new_event = Event(owner=current_user,
-                          title=event_manage_form.title.data,
-                          start_time=event_manage_form.start_time.data,
-                          duration=event_manage_form.duration.data,
-                          description=event_manage_form.description.data,
-                          link=event_manage_form.link.data)
-        db.session.add(new_event)
-        db.session.commit()
-        return redirect(url_for('.events_all'))'''
-        # todo edit the event
+        event_manage_form.populate_obj(event)
+        return redirect(url_for('.events_detail', event_id=event.id))
     return render_template('events/manage.html', event_manage_form=event_manage_form)

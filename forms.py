@@ -2,7 +2,8 @@ from datetime import datetime
 
 from flask_wtf import Form
 from sqlalchemy import func
-from wtforms import DateTimeField, FloatField, PasswordField, StringField, IntegerField, ValidationError
+from wtforms import ValidationError
+from wtforms.fields import *
 from wtforms.validators import InputRequired, Length
 from wtforms.widgets import TextArea
 
@@ -57,3 +58,7 @@ class EventForm(Form):
     def validate_link(self, field):
         if not any(field.data.startswith(prefix) for prefix in [u'http://', u'https://']):
             raise ValidationError('Invalid link')
+
+
+class EventUpdateForm(EventForm):
+    id = HiddenField()

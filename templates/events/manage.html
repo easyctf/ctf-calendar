@@ -32,7 +32,8 @@
                             <div id="login_msg"></div>
                         </fieldset>
                         <fieldset class="container-fluid">
-                            {% for field in event_manage_form if field.id != 'csrf_token' %}
+                            {{ event_manage_form.id() }}
+                            {% for field in event_manage_form if field.id != 'csrf_token' and field.id != 'id' %}
                                 <div class="row">
                                     <div class="col-sm-12 form-group">
                                         {{ field.label(class_="col-sm-3 control-label") }}
@@ -47,7 +48,7 @@
                                 <div class="col-sm-12 form-group">
                                     <label class="col-sm-3 control-label"></label>
                                     <div class="col-sm-9">
-                                        <input type="submit" class="btn btn-success" value="Create"/>
+                                        <input type="submit" class="btn btn-success" value="Update"/>
                                     </div>
                                 </div>
                             </div>
