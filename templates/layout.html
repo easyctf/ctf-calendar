@@ -36,6 +36,9 @@
                         <li><a href="{{ url_for('events.events_list') }}">All Events</a></li>
                         <li><a href="/events/upcoming">Upcoming Events</a></li>
                         <li><a href="/events/past">Past Events</a></li>
+                        {% if current_user.admin %}
+                            <li><a href="{{ url_for('events.events_unapproved') }}">Unapproved Events</a></li>
+                        {% endif %}
                     </ul>
                 </li>
                 <li class="dropdown">
