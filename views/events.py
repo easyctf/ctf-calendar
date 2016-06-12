@@ -95,3 +95,10 @@ def events_approve(event_id):
         db.session.commit()
         flash("Event %d approved!" % event_id)
     return redirect(url_for('.events_unapproved'))
+
+
+@blueprint.route('/events/owned')
+@login_required
+def events_owned():
+    owned_events = current_user.events
+    return render_template('events/list.html', tab="owned", events=owned_events)

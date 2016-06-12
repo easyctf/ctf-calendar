@@ -6,17 +6,25 @@
 
 {% block content %}
     <ul class="nav nav-tabs" role="tablist">
-        <li role="presentation"{% if tab=="all" %} class="active"{% endif %}><a
-                href="{{ url_for('events.events_all') }}" aria-controls="home" role="tab">All</a></li>
-        {% if current_user.admin == true %}
-            <li role="presentation"{% if tab=="unapproved" %} class="active"{% endif %}><a
-                    href="{{ url_for('events.events_unapproved') }}" aria-controls="settings" role="tab">Unapproved</a>
+        <li role="presentation"{% if tab == "all" %} class="active"{% endif %}><a
+                href="{{ url_for('events.events_all') }}" aria-controls="home" role="tab">All</a>
+        </li>
+        {% if current_user.admin %}
+            <li role="presentation"{% if tab == "unapproved" %} class="active"{% endif %}>
+                <a href="{{ url_for('events.events_unapproved') }}" aria-controls="settings" role="tab">Unapproved</a>
             </li>
         {% endif %}
-        <li role="presentation"{% if tab=="upcoming" %} class="active"{% endif %}><a
-                href="{{ url_for('events.events_upcoming') }}" aria-controls="profile" role="tab">Upcoming</a></li>
-        <li role="presentation"{% if tab=="past" %} class="active"{% endif %}><a
-                href="{{ url_for('events.events_past') }}" aria-controls="messages" role="tab">Past</a></li>
+        <li role="presentation"{% if tab == "upcoming" %} class="active"{% endif %}>
+            <a href="{{ url_for('events.events_upcoming') }}" aria-controls="profile" role="tab">Upcoming</a>
+        </li>
+        <li role="presentation"{% if tab == "past" %} class="active"{% endif %}>
+            <a href="{{ url_for('events.events_past') }}" aria-controls="messages" role="tab">Past</a>
+        </li>
+        {% if current_user.is_authenticated %}
+            <li role="presentation"{% if tab == "owned" %} class="active"{% endif %}>
+                <a href="{{ url_for('events.events_owned') }}" aria-controls="messages" role="tab">Owned</a>
+            </li>
+        {% endif %}
     </ul>
 
     <!-- Tab panes -->
