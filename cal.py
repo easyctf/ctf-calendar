@@ -3,8 +3,8 @@ import os
 from flask import Flask
 
 import config
-from models import db, login_manager
 import views
+from models import db, login_manager
 
 app = Flask(__name__, static_url_path='')
 self_path = os.path.dirname(os.path.abspath(__file__))

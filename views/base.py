@@ -7,6 +7,7 @@ blueprint = Blueprint('base', __name__, template_folder='templates')
 def index():
     return render_template("base/index.html")
 
+
 @blueprint.route("/about")
 def about():
     return render_template("base/about.html")
