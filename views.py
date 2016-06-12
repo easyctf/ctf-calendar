@@ -1,3 +1,5 @@
+import json
+
 from flask import Blueprint, flash, redirect, render_template, url_for
 from flask_login import current_user, login_required, login_user, logout_user
 from sqlalchemy import desc
@@ -6,9 +8,6 @@ from forms import EventCreateForm, LoginForm, RegisterForm
 from models import db
 from models import login_manager, Event, User
 from util import admin_required
-
-import json
-import time
 
 blueprint_base = Blueprint('base', __name__, template_folder='templates')
 blueprint_users = Blueprint('users', __name__, template_folder='templates')
