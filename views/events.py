@@ -3,9 +3,9 @@ import json
 from flask import Blueprint, redirect, render_template, url_for, flash
 from flask_login import current_user, login_required
 
-from forms import EventCreateForm
+from forms import EventForm
 from models import db, Event
-from util import admin_required
+from util import admin_required, isoformat
 
 blueprint = Blueprint('events', __name__, template_folder='templates')
 
@@ -13,7 +13,7 @@ blueprint = Blueprint('events', __name__, template_folder='templates')
 @blueprint.route('/create', methods=['GET', 'POST'])
 @login_required
 def events_create():
-    event_create_form = EventCreateForm()
+    event_create_form = EventForm()
     if event_create_form.validate_on_submit():
         new_event = Event(owner=current_user,
                           title=event_create_form.title.data,
@@ -23,7 +23,7 @@ def events_create():
                           link=event_create_form.link.data)
         db.session.add(new_event)
         db.session.commit()
-        return redirect(url_for('.events_all'))
+        return redirect(url_for('.events_owned'))
     return render_template('events/create.html', event_create_form=event_create_form)
 
 
@@ -49,6 +49,8 @@ def events_list_json():
 @blueprint.route('/all')
 def events_all():
     events = Event.query.filter_by(approved=True).order_by(Event.start_time.desc()).all()
+    for event in events:
+        event.start_time_format = isoformat(event.start_time)
     return render_template('events/list.html', tab='all', events=events)
 
 
@@ -56,6 +58,8 @@ def events_all():
 @blueprint.route('/upcoming')
 def events_upcoming():
     events = Event.query.filter_by(approved=True).order_by(Event.start_time.desc()).all()
+    for event in events:
+        event.start_time_format = isoformat(event.start_time)
     return render_template('events/list.html', tab='upcoming', events=events)
 
 
@@ -63,6 +67,8 @@ def events_upcoming():
 @blueprint.route('/past')
 def events_past():
     events = Event.query.filter_by(approved=True).order_by(Event.start_time.desc()).all()
+    for event in events:
+        event.start_time_format = isoformat(event.start_time)
     return render_template('events/list.html', tab='past', events=events)
 
 
@@ -70,7 +76,18 @@ def events_past():
 @admin_required
 def events_unapproved():
     unapproved_events = Event.query.filter_by(approved=False).order_by(Event.start_time.desc()).all()
+    for event in unapproved_events:
+        event.start_time_format = isoformat(event.start_time)
     return render_template('events/list.html', tab='unapproved', events=unapproved_events, enabled_actions=['approve'])
+
+
+@blueprint.route('/owned')
+@login_required
+def events_owned():
+    owned_events = current_user.events
+    for event in owned_events:
+        event.start_time_format = isoformat(event.start_time)
+    return render_template('events/list.html', tab='owned', events=owned_events, enabled_actions=['manage'])
 
 
 @blueprint.route('/<int:event_id>')
@@ -92,8 +109,20 @@ def events_approve(event_id):
     return redirect(url_for('.events_unapproved'))
 
 
-@blueprint.route('/owned')
+@blueprint.route('/<int:event_id>/manage', methods=['GET', 'POST'])
 @login_required
-def events_owned():
-    owned_events = current_user.events
-    return render_template('events/list.html', tab='owned', events=owned_events)
+def events_manage(event_id):
+    event = Event.query.get_or_404(event_id)
+    event_manage_form = EventForm()
+    if event_manage_form.validate_on_submit():
+        '''new_event = Event(owner=current_user,
+                          title=event_manage_form.title.data,
+                          start_time=event_manage_form.start_time.data,
+                          duration=event_manage_form.duration.data,
+                          description=event_manage_form.description.data,
+                          link=event_manage_form.link.data)
+        db.session.add(new_event)
+        db.session.commit()
+        return redirect(url_for('.events_all'))'''
+        # todo edit the event
+    return render_template('events/manage.html', event_manage_form=event_manage_form)

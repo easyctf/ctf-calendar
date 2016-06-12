@@ -1,9 +1,14 @@
+import datetime
 import re
 from functools import wraps
 
 from flask import abort
 from flask_login import current_user, login_required
 from passlib.hash import bcrypt
+
+
+def isoformat(seconds):
+    return datetime.datetime.fromtimestamp(seconds).isoformat() + "Z"
 
 
 def hash_password(password, rounds=10):

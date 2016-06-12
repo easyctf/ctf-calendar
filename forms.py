@@ -47,7 +47,7 @@ class RegisterForm(Form):
             raise ValidationError('Username taken!')
 
 
-class EventCreateForm(Form):
+class EventForm(Form):
     title = StringField('Title', validators=[InputRequired(), Length(max=256)])
     start_time = IntegerField('Start Time', validators=[InputRequired()])
     duration = FloatField('Duration (hours)', validators=[InputRequired()])
