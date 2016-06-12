@@ -22,11 +22,12 @@
 #timeline #ctf_schedule .ctf {
 	position: absolute;
 	box-sizing: border-box;
-	padding: 4px 0;
+	padding: 4px 6px;
 	background-color: #303E43;
 	box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
 	transition: -webkit-filter 0.13s, filter 0.13s;
 	color: #fff;
+	text-decoration: none;
 }
 
 #timeline #ctf_schedule .timeline {
@@ -74,6 +75,15 @@
 
 #timeline #ctf_schedule .name {
 	color: white;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	display: block;
+	white-space: nowrap;
+}
+
+#timeline #ctf_schedule .date {
+	color: white;
+	font-size: 0.75em;
 	overflow: hidden;
 	text-overflow: ellipsis;
 	display: block;

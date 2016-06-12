@@ -71,10 +71,11 @@ var fitLane = function(lane, ctf2) {
 
 var renderCTF = function(ctf) {
 	var ctf_days = ctf.duration / 7.0;
-	var width = ctf_days * 60* scale;
+	var width = ctf.duration * 60 * scale;
 	var left = leftPos(ctf.startTime);
 	return "<a class='ctf' href='/events/" + ctf.id + "' style='width:" + width + "px;left:" + left + "px;'>"
 		+ "<span class='name'>" + ctf.name + "</span>"
+		+ "<span class='date'>" + timeString(ctf.startTime) + "</span>"
 		+ "</a>";
 }
 

@@ -5,6 +5,20 @@
 {% endblock %}
 
 {% block content %}
+    <ul class="nav nav-tabs" role="tablist">
+        <li role="presentation" class="active"><a href="{{ url_for('events.all') }}" aria-controls="home" role="tab">All</a></li>
+        {% if current_user.admin == true %}
+            <li role="presentation"><a href="{{ url_for('events.unapproved') }}" aria-controls="settings" role="tab">Unapproved</a></li>
+        {% endif %}
+        <li role="presentation"><a href="{{ url_for('events.upcoming') }}" aria-controls="profile" role="tab">Upcoming</a></li>
+        <li role="presentation"><a href="{{ url_for('events.past') }}" aria-controls="messages" role="tab">Past</a></li>
+    </ul>
+
+    <!-- Tab panes -->
+    <div class="tab-content">
+        <div role="tabpanel" class="tab-pane active">
+        </div>
+    </div>
     {% for event in events %}
         <div id="event_{{ event.id }}">
             <b><a href="{{ url_for('events.events_detail', event_id=event.id) }}">{{ event.title }}</a></b>
