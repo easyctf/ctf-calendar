@@ -3,9 +3,8 @@ import json
 from flask import Blueprint, redirect, render_template, url_for, flash
 from flask_login import current_user, login_required
 
-from cal import db
 from forms import EventCreateForm
-from models import Event
+from models import db, Event
 from util import admin_required
 
 blueprint = Blueprint('events', __name__, template_folder='templates')
