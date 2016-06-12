@@ -33,7 +33,7 @@
                     <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button"
                        aria-haspopup="true" aria-expanded="false">Play <span class="caret"></span></a>
                     <ul class="dropdown-menu">
-                        <li><a href="{{ url_for('events.events_list') }}">All Events</a></li>
+                        <li><a href="{{ url_for('events.events_all') }}">All Events</a></li>
                         {% if current_user.admin == true %}
                             <li><a href="/events/unapproved">Unapproved Events</a></li>
                         {% endif %}

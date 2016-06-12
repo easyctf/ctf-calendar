@@ -1,5 +1,3 @@
-import json
-
 from flask import Blueprint, redirect, render_template, url_for, flash
 from flask_login import current_user, login_required
 
@@ -7,6 +5,8 @@ from cal import db
 from forms import EventCreateForm
 from models import Event
 from util import admin_required
+
+import json
 
 blueprint = Blueprint('events', __name__, template_folder='templates')
 
@@ -28,12 +28,6 @@ def events_create():
     return render_template('events/create.html', event_create_form=event_create_form)
 
 
-@blueprint.route('/')
-def events_list():
-    events = Event.query.filter_by(approved=True).order_by(Event.start_time.desc()).all()
-    return render_template('events/list.html', events=events)
-
-
 @blueprint.route('/list/json')
 def events_list_json():
     events = Event.query.filter_by().order_by(Event.start_time.desc()).all()
@@ -50,7 +44,7 @@ def events_list_json():
         event_list.append(obj)
     return json.dumps(event_list)
 
-
+@blueprint.route('/')
 @blueprint.route('/all')
 def events_all():
     events = Event.query.filter_by(approved=True).order_by(Event.start_time.desc()).all()
