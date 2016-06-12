@@ -1,0 +1,26 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Home
+{% endblock %}
+
+{% block content %}
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h4 class="panel-title">About</h4>
+        </div>
+        <div class="panel-body">
+            <p>As CTFs become more popular, it's important to create a central repository of CTFs. Thus, this site aims to remind CTF participants about upcoming events, as well as help CTF organizers get the word out about their competition.</p>
+            <p>Ultimately, we may expand this site to include a way to index teams and track their performance, but as of now, it's simply a list of upcoming and archived events. Previously, adding to the calendar required moderated approval through pull requests in the Git repository, so this site will also require all user-submitted entries to be approved before they are added to the main calendar on the front page.</p>
+            <p>If you are familiar with <a href="http://sctftime.org" target="_blank">CTFtime</a>, this site is similar in concept to CTFtime, but targeted at the high school level.
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h4 class="panel-title">What is CTF?</h4>
+        </div>
+        <div class="panel-body">
+            <p>No, we're not running around in a gym, tagging other players. Capture the flag contests, or CTFs for short, are intense cybersecurity contests where participants try to capture a piece of information. To do this, they must use skills to capture a virtual flag, usually taking the form of a string, like this: <code>flag{this_is_a_flag}</code>. In most jeopardy-style CTFs (like EasyCTF), participants are tested on their security skills in the form of web, binary exploitation, forensics, cryptography, and reverse-engineering challenges.</p>
+        </div>
+    </div>
+{% endblock %}

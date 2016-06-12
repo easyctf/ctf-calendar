@@ -6,6 +6,10 @@ blueprint_base = Blueprint('base', __name__, template_folder='templates')
 def index():
     return render_template("base/index.html")
 
+@blueprint_base.route("/about")
+def about():
+    return render_template("base/about.html")
+
 
 @blueprint_base.app_errorhandler(404)
 def error_404(e):
