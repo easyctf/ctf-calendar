@@ -1,7 +1,7 @@
 from datetime import datetime
-from sqlalchemy import func
 
 from flask_wtf import Form
+from sqlalchemy import func
 from wtforms import DateTimeField, FloatField, PasswordField, StringField, ValidationError
 from wtforms.validators import InputRequired, Length
 from wtforms.widgets import TextArea
@@ -37,13 +37,13 @@ class RegisterForm(Form):
     def validate_email(self, field):
         if not util.validate_email_format(field.data):
             raise ValidationError('Invalid email')
-        if User.query.filter(func.lower(User.email)==func.lower(field.data)).count():
+        if User.query.filter(func.lower(User.email) == func.lower(field.data)).count():
             raise ValidationError('Email taken!')
 
     def validate_username(self, field):
         if not util.validate_username_format(field.data):
             raise ValidationError('Invalid username')
-        if User.query.filter_by(username=field.data).count():
+        if User.query.filter(func.lower(User.username) == func.lower(field.data)).count():
             raise ValidationError('Username taken!')
 
 

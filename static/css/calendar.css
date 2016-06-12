@@ -1,22 +1,22 @@
 #timeline #ctf_schedule {
-	/* min-height: 400px; */
-	position: relative;
+    /* min-height: 400px; */
+    position: relative;
 }
 
 #timeline #ctf_schedule .spinner {
-	width: 120px;
-	height: 120px;
-	padding-top: 120px;
-	opacity: 0.7;
+    width: 120px;
+    height: 120px;
+    padding-top: 120px;
+    opacity: 0.7;
 }
 
 #timeline #ctf_schedule .schedule {
-	position: relative;
-	overflow-x: scroll;
-	padding-top: 30px;
-	border-top: 1px solid #d4d4d4;
-	cursor: move;
-	height: 100%;
+    position: relative;
+    overflow-x: scroll;
+    padding-top: 30px;
+    border-top: 1px solid #d4d4d4;
+    cursor: move;
+    height: 100%;
 }
 
 #timeline #ctf_schedule .ctf {
@@ -31,54 +31,54 @@
 }
 
 #timeline #ctf_schedule .timeline {
-	position: absolute;
-	top: 0;
-	height: 100%;
-	user-select: none;
-	-moz-user-select: none;
-	-webkit-user-select: none;
+    position: absolute;
+    top: 0;
+    height: 100%;
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
 }
 
 #timeline #ctf_schedule .ctfline {
-	position: relative;
-	height: 5em;
+    position: relative;
+    height: 5em;
 }
 
 #timeline #ctf_schedule .timeheader {
-	position: absolute;
-	display: inline;
-	box-sizing: border-box;
-	height: 100%;
-	width: auto;
-	border-left: 1px dashed #bbb;
-	padding: 2px 5px;
-	font-size: 11px;
+    position: absolute;
+    display: inline;
+    box-sizing: border-box;
+    height: 100%;
+    width: auto;
+    border-left: 1px dashed #bbb;
+    padding: 2px 5px;
+    font-size: 11px;
 }
 
 #timeline #ctf_schedule .timeheader.week {
-	font-weight: bold;
-	border-left-style: solid;
+    font-weight: bold;
+    border-left-style: solid;
 }
 
 #timeline #ctf_schedule .timeheader.now {
-	top: 1.7em;
-	height: calc(100% - 1.7em);
-	margin-left: 1px;
-	border-left: 2px dashed #d85000!important;
+    top: 1.7em;
+    height: calc(100% - 1.7em);
+    margin-left: 1px;
+    border-left: 2px dashed #d85000 !important;
 }
 
 #timeline #ctf_schedule .icon {
-	float: left;
-	font-size: 2.4em;
-	margin: -6px 2px 0px 2px;
+    float: left;
+    font-size: 2.4em;
+    margin: -6px 2px 0px 2px;
 }
 
 #timeline #ctf_schedule .name {
-	color: white;
-	overflow: hidden;
-	text-overflow: ellipsis;
-	display: block;
-	white-space: nowrap;
+    color: white;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: block;
+    white-space: nowrap;
 }
 
 #timeline #ctf_schedule .date {
@@ -91,5 +91,5 @@
 }
 
 #timeline #ctf_schedule .ctf span {
-	margin-right: 4px;
+    margin-right: 4px;
 }

@@ -4,7 +4,8 @@
     <title>{% block title %}{% endblock %} - CTF Calendar</title>
     <link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.6/yeti/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-yxFy3Tt84CcGRj9UI7RA25hoUMpUPoFzcdPtK3hBdNgEGnh9FdKgMVM+lbAZTKN2" crossorigin="anonymous">
-    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet"
+          integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
     <link rel="stylesheet" href="{{ url_for('static', filename='/css/calendar.css') }}"/>
     <script src="https://code.jquery.com/jquery-2.1.4.min.js"
             integrity="sha384-R4/ztc4ZlRqWjqIuvf6RX5yb/v90qNGx6fS48N0tRxiGkqveZETq72KgDVJCp2TC"
@@ -39,6 +40,9 @@
                         <li role="separator" class="divider"></li>
                         <li><a href="/events/upcoming">Upcoming Events</a></li>
                         <li><a href="/events/past">Past Events</a></li>
+                        {% if current_user.admin %}
+                            <li><a href="{{ url_for('events.events_unapproved') }}">Unapproved Events</a></li>
+                        {% endif %}
                     </ul>
                 </li>
                 <li class="dropdown">
@@ -99,7 +103,8 @@
         <div class="col-sm-3">
             <div id="sidebar" data-spy="affix">
                 <div class="jumbotron">
-                    <h3 style="text-align:center;"><a href="/" style="text-decoration:none;"><i class="fa fa-fw fa-calendar"></i> Calendar</a></h3>
+                    <h3 style="text-align:center;"><a href="/" style="text-decoration:none;"><i
+                            class="fa fa-fw fa-calendar"></i> Calendar</a></h3>
                 </div>
             </div>
         </div>

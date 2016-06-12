@@ -23,7 +23,9 @@ class CalendarConfig:
             self.WTF_CSRF_ENABLED = False
 
     def _load_secret_key(self):
-        if not self.SECRET_KEY:
+        if 'SECRET_KEY' in os.environ:
+            self.SECRET_KEY = os.environ['SECRET_KEY']
+        else:
             secret_path = self.app_root / '.secret_key'
             with secret_path.open('a+b') as secret_file:
                 contents = secret_file.read()

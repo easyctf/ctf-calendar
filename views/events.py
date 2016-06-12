@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, url_for
+from flask import Blueprint, render_template, url_for, flash
 from flask_login import current_user, login_required, login_user, logout_user
 from forms import EventCreateForm
 
@@ -6,7 +6,6 @@ from models import Event
 from util import admin_required
 
 blueprint_events = Blueprint('events', __name__, template_folder='templates')
-
 
 @blueprint_events.route('/create', methods=['GET', 'POST'])
 @login_required
@@ -27,13 +26,13 @@ def events_create():
 
 @blueprint_events.route('/')
 def events_list():
-    events = Event.query.filter_by(approved=True).order_by(desc(Event.start_time)).all()
+    events = Event.query.filter_by(approved=True).order_by(Event.start_time.desc()).all()
     return render_template('events/list.html', events=events)
 
 
 @blueprint_events.route('/list/json')
 def events_list_json():
-    events = Event.query.filter_by().order_by(desc(Event.start_time)).all()
+    events = Event.query.filter_by().order_by(Event.start_time.desc()).all()
     event_list = []
     for event in events:
         start_time = int(event.start_time.strftime("%s"))
@@ -51,7 +50,7 @@ def events_list_json():
 @blueprint_events.route('/unapproved')
 @admin_required
 def events_unapproved():
-    unapproved_events = Event.query.filter_by(approved=False).order_by(desc(Event.start_time)).all()
+    unapproved_events = Event.query.filter_by(approved=False).order_by(Event.start_time.desc()).all()
     return render_template('events/list.html', events=unapproved_events, enabled_actions=['approve'])
 
 

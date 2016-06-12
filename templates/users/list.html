@@ -1,0 +1,18 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Event List
+{% endblock %}
+
+{% block content %}
+    {% for user in users %}
+        <div id="user_{{ user.id }}">
+            {{ user.id }}
+            <b><a href="{{ url_for('users.users_detail', user_id=user.id) }}">{{ user.username }}</a></b>
+            {% if enabled_actions %}
+                <form></form>
+            {% endif %}
+            <br/>
+        </div>
+    {% endfor %}
+{% endblock %}
