@@ -44,8 +44,8 @@ def events_list_json():
         event_list.append(obj)
     return json.dumps(event_list)
 
-@blueprint_events.route('/')
-@blueprint_events.route('/all')
+@blueprint.route('/')
+@blueprint.route('/all')
 def events_all():
     events = Event.query.filter_by(approved=True).order_by(Event.start_time.desc()).all()
     return render_template('events/list.html', tab="all", events=events)
