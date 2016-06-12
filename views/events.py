@@ -47,11 +47,29 @@ def events_list_json():
     return json.dumps(event_list)
 
 
+@blueprint_events.route('/all')
+def events_all():
+    events = Event.query.filter_by(approved=True).order_by(Event.start_time.desc()).all()
+    return render_template('events/list.html', tab="all", events=events)
+
+#todo
+@blueprint_events.route('/upcoming')
+def events_upcoming():
+    events = Event.query.filter_by(approved=True).order_by(Event.start_time.desc()).all()
+    return render_template('events/list.html', tab="upcoming", events=events)
+
+#todo
+@blueprint_events.route('/past')
+def events_past():
+    events = Event.query.filter_by(approved=True).order_by(Event.start_time.desc()).all()
+    return render_template('events/list.html', tab="past", events=events)
+
+
 @blueprint_events.route('/unapproved')
 @admin_required
 def events_unapproved():
     unapproved_events = Event.query.filter_by(approved=False).order_by(Event.start_time.desc()).all()
-    return render_template('events/list.html', events=unapproved_events, enabled_actions=['approve'])
+    return render_template('events/list.html', tab="unapproved", events=unapproved_events, enabled_actions=['approve'])
 
 
 @blueprint_events.route('/<int:event_id>')

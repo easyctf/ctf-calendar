@@ -37,8 +37,19 @@ def logout():
     logout_user()
     return redirect(url_for('base.index'))
 
-
 @blueprint_users.route('/profile', methods=['GET'])
 @login_required
 def profile():
-    return render_template('users/profile.html')
+    return render_template('users/profile.html', user=current_user)
+
+
+@blueprint_users.route('/users')
+def users_list():
+    users = User.query.order_by(User.id).all()
+    return render_template('users/list.html', users=users)
+
+
+@blueprint_users.route('/users/<int:user_id>')
+def users_detail(user_id):
+    user = User.query.get_or_404(user_id)
+    return render_template('users/profile.html', user=user)
