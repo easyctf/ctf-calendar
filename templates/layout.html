@@ -13,6 +13,7 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
             integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS"
             crossorigin="anonymous"></script>
+            <script src="https://cdn.rawgit.com/samsonjs/strftime/master/strftime-min.js" integrity="sha384-8QM2tOnzhlTLUdcE/K8GgUJpF68bCyCCgTEsoTJ2GYXnS2bNqnpU+l+7buqF1POu" crossorigin="anonymous"></script>
 </head>
 <body>
 <nav role="navigation" class="navbar navbar-default">
@@ -88,7 +89,7 @@
 <div class="container">
     {% with messages = get_flashed_messages() %}
         {% if messages %}
-            <div class="alert alert-danger">
+            <div class="alert alert-info">
                 <ul class=flashes>
                     {% for message in messages %}
                         <li>{{ message }}</li>

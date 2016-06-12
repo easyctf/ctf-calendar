@@ -35,6 +35,7 @@ def events_list_json():
         start_time = event.start_time
         obj = {
             'id': event.id,
+            'approved': event.approved,
             'name': event.title,
             'startTime': start_time * 1000,
             'endTime': (start_time + event.duration * 60 * 60) * 1000,
