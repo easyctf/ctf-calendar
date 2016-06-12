@@ -54,7 +54,7 @@
                                         </button>
                                     {% endif %}
                                     {% if 'manage' in enabled_actions %}
-                                        <button id="approve_{{ event.id }}"
+                                        <button id="approve_{{ event.id }}" type="submit"
                                                 formaction="{{ url_for('events.events_manage', event_id=event.id) }}"
                                                 formmethod="get">Manage
                                         </button>

@@ -24,9 +24,8 @@ def login():
 def register():
     register_form = RegisterForm()
     if register_form.validate_on_submit():
-        new_user = User(email=register_form.email.data,
-                        username=register_form.username.data,
-                        password=register_form.password.data)
+        new_user = User()
+        register_form.populate_obj(new_user)
         db.session.add(new_user)
         db.session.commit()
         login_user(new_user)
