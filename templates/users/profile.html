@@ -8,11 +8,11 @@
     <div class="panel panel-default">
         <div class="panel-heading">
             <h4 class="panel-title">
-                {{ current_user.username }}
+                {{ user.username }}
             </h4>
         </div>
         <div class="panel-body">
-            Hi. This is your profile. There's nothing here, tho.
+            Hi. This is {% if user == current_user %} your {% else %} a {% endif %} profile. There's nothing here, tho.
         </div>
     </div>
 {% endblock %}

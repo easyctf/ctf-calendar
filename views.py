@@ -2,7 +2,6 @@ import json
 
 from flask import Blueprint, flash, redirect, render_template, url_for
 from flask_login import current_user, login_required, login_user, logout_user
-from sqlalchemy import desc
 
 from forms import EventCreateForm, LoginForm, RegisterForm
 from models import db
@@ -60,7 +59,19 @@ def logout():
 @blueprint_users.route('/profile', methods=['GET'])
 @login_required
 def profile():
-    return render_template('users/profile.html')
+    return render_template('users/profile.html', user=current_user)
+
+
+@blueprint_users.route('/users')
+def users_list():
+    users = User.query.order_by(User.id).all()
+    return render_template('users/list.html', users=users)
+
+
+@blueprint_users.route('/users/<int:user_id>')
+def users_detail(user_id):
+    user = User.query.get_or_404(user_id)
+    return render_template('users/profile.html', user=user)
 
 
 @blueprint_events.route('/create', methods=['GET', 'POST'])
@@ -82,13 +93,13 @@ def events_create():
 
 @blueprint_events.route('/')
 def events_list():
-    events = Event.query.filter_by(approved=True).order_by(desc(Event.start_time)).all()
+    events = Event.query.filter_by(approved=True).order_by(Event.start_time.desc()).all()
     return render_template('events/list.html', events=events)
 
 
 @blueprint_events.route('/list/json')
 def events_list_json():
-    events = Event.query.filter_by().order_by(desc(Event.start_time)).all()
+    events = Event.query.filter_by().order_by(Event.start_time.desc()).all()
     event_list = []
     for event in events:
         start_time = int(event.start_time.strftime("%s"))
@@ -106,7 +117,7 @@ def events_list_json():
 @blueprint_events.route('/unapproved')
 @admin_required
 def events_unapproved():
-    unapproved_events = Event.query.filter_by(approved=False).order_by(desc(Event.start_time)).all()
+    unapproved_events = Event.query.filter_by(approved=False).order_by(Event.start_time.desc()).all()
     return render_template('events/list.html', events=unapproved_events, enabled_actions=['approve'])
 
 
