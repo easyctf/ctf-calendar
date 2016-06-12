@@ -38,6 +38,7 @@ def events_list_json():
             'approved': event.approved,
             'name': event.title,
             'startTime': start_time * 1000,
+            'startTimeFormat': isoformat(start_time),
             'endTime': (start_time + event.duration * 60 * 60) * 1000,
             'duration': event.duration
         }

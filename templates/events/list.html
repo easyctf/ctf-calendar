@@ -5,73 +5,69 @@
 {% endblock %}
 
 {% block content %}
-    <ul class="nav nav-tabs" role="tablist">
-        <li role="presentation"{% if tab == "all" %} class="active"{% endif %}><a
-                href="{{ url_for('events.events_all') }}" aria-controls="home" role="tab">All</a>
-        </li>
-        {% if current_user.admin %}
-            <li role="presentation"{% if tab == "unapproved" %} class="active"{% endif %}>
-                <a href="{{ url_for('events.events_unapproved') }}" aria-controls="settings" role="tab">Unapproved</a>
+    <div class="panel panel-default">
+        <ul class="nav nav-tabs" role="tablist">
+            <li role="presentation"{% if tab == "all" %} class="active"{% endif %}><a
+                    href="{{ url_for('events.events_all') }}" aria-controls="home" role="tab">All</a>
             </li>
-        {% endif %}
-        <li role="presentation"{% if tab == "upcoming" %} class="active"{% endif %}>
-            <a href="{{ url_for('events.events_upcoming') }}" aria-controls="profile" role="tab">Upcoming</a>
-        </li>
-        <li role="presentation"{% if tab == "past" %} class="active"{% endif %}>
-            <a href="{{ url_for('events.events_past') }}" aria-controls="messages" role="tab">Past</a>
-        </li>
-        {% if current_user.is_authenticated %}
-            <li role="presentation"{% if tab == "owned" %} class="active"{% endif %}>
-                <a href="{{ url_for('events.events_owned') }}" aria-controls="messages" role="tab">Owned</a>
+            {% if current_user.admin %}
+                <li role="presentation"{% if tab == "unapproved" %} class="active"{% endif %}>
+                    <a href="{{ url_for('events.events_unapproved') }}" aria-controls="settings" role="tab">Unapproved</a>
+                </li>
+            {% endif %}
+            <li role="presentation"{% if tab == "upcoming" %} class="active"{% endif %}>
+                <a href="{{ url_for('events.events_upcoming') }}" aria-controls="profile" role="tab">Upcoming</a>
             </li>
-        {% endif %}
-    </ul>
-
-    <!-- Tab panes -->
-    <div class="tab-content">
-        <div role="tabpanel" class="tab-pane active">
-            <table class="table table-hover table-striped">
-                <thead>
-                    <th>Name</th>
-                    <th>Owner</th>
-                    <th>Description</th>
-                    <th>Date</th>
-                    <th>Website</th>
-                    {% if enabled_actions %}
-                        <th>Actions</th>
-                    {% endif %}
-                </thead>
-                <tbody>
-                    {% for event in events %}
-                        <tr id="event_{{ event.id }}">
-                            <td><a href="{{ url_for('events.events_detail', event_id=event.id) }}">{{ event.title }}</a></td>
-                            <td>{{ event.owner.username }}</td>
-                            <td>{{ event.description }}</td>
-                            <td><time class="timeago" datetime="{{ event.start_time_format }}"></time></td>
-                            <td><a href="{{ event.link }}">Website</a></td>
-                            {% if enabled_actions %}
-                                <td>
-                                    <form>
-                                        {% if 'approve' in enabled_actions %}
-                                            <button id="approve_{{ event.id }}" type="submit"
-                                                    formaction="{{ url_for('events.events_approve', event_id=event.id) }}"
-                                                    formmethod="post">Approve
-                                            </button>
-                                        {% endif %}
-                                        {% if 'manage' in enabled_actions %}
-                                            <button id="approve_{{ event.id }}"
-                                                    formaction="{{ url_for('events.events_manage', event_id=event.id) }}"
-                                                    formmethod="get">Manage
-                                            </button>
-                                        {% endif %}
-                                    </form>
-                                </td>
-                            {% endif %}
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
+            <li role="presentation"{% if tab == "past" %} class="active"{% endif %}>
+                <a href="{{ url_for('events.events_past') }}" aria-controls="messages" role="tab">Past</a>
+            </li>
+            {% if current_user.is_authenticated %}
+                <li role="presentation"{% if tab == "owned" %} class="active"{% endif %}>
+                    <a href="{{ url_for('events.events_owned') }}" aria-controls="messages" role="tab">Owned</a>
+                </li>
+            {% endif %}
+        </ul>
+        <table class="table table-hover table-striped">
+            <thead>
+                <th>Name</th>
+                <th>Owner</th>
+                <th>Description</th>
+                <th>Date</th>
+                <th>Website</th>
+                {% if enabled_actions %}
+                    <th>Actions</th>
+                {% endif %}
+            </thead>
+            <tbody>
+                {% for event in events %}
+                    <tr id="event_{{ event.id }}">
+                        <td><a href="{{ url_for('events.events_detail', event_id=event.id) }}">{{ event.title }}</a></td>
+                        <td>{{ event.owner.username }}</td>
+                        <td>{{ event.description }}</td>
+                        <td><time class="timeago" datetime="{{ event.start_time_format }}">{{ event.start_time_format }}</time></td>
+                        <td><a href="{{ event.link }}">Website</a></td>
+                        {% if enabled_actions %}
+                            <td>
+                                <form>
+                                    {% if 'approve' in enabled_actions %}
+                                        <button id="approve_{{ event.id }}" type="submit"
+                                                formaction="{{ url_for('events.events_approve', event_id=event.id) }}"
+                                                formmethod="post">Approve
+                                        </button>
+                                    {% endif %}
+                                    {% if 'manage' in enabled_actions %}
+                                        <button id="approve_{{ event.id }}"
+                                                formaction="{{ url_for('events.events_manage', event_id=event.id) }}"
+                                                formmethod="get">Manage
+                                        </button>
+                                    {% endif %}
+                                </form>
+                            </td>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
 
     <script type="text/javascript">

@@ -111,9 +111,12 @@ $(document).ready(function () {
             var ctfs = [];
             lane.map(function (ctf) {
                 ctfs.push(renderCTF(ctf));
+                $("#upcoming_ctfs").append("<tr><td><a href='/events/" + ctf.id + "'>" + ctf.name + "</a></td><td><time class='timeago' datetime='" + ctf.startTimeFormat + "'>" + ctf.startTimeFormat + "</time></td></tr>");
             });
             $("#ctf_schedule .dragscroll").append("<div class='ctfline'>" + ctfs.join("") + "</div>");
         });
         $("#ctf_schedule .dragscroll")[0].scrollLeft = leftPos(now + 2 * 24 * 60 * 60 * 1000 - $("#ctf_schedule .dragscroll")[0].clientWidth / 2 / scale * 60 * 1000);
+        $.timeago.settings.allowFuture = true;
+        $(".timeago").timeago();
     });
 });

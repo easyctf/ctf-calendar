@@ -17,6 +17,20 @@
             </div>
         </div>
     </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h4 class="panel-title">Upcoming Events
+                <span class="pull-right"><a href="/events/upcoming">More &raquo;</a></span>
+            </h4>
+        </div>
+        <table class="table table-hover table-striped">
+            <thead>
+                <th>Name</th>
+                <th>Date</th>
+            </head>
+            <tbody id="upcoming_ctfs"></tbody>
+        </table>
+    </div>
 
     <script type="text/javascript" src="{{ url_for('static', filename='/js/dragscroll.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='/js/jquery.infinitescroll.min.js') }}"></script>
