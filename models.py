@@ -84,7 +84,7 @@ class Event(db.Model):
     owner = db.relationship('User', backref='events')
     approved = db.Column(db.Boolean, default=False)
     title = db.Column(db.Unicode(length=256))
-    start_time = db.Column(db.DateTime, index=True)
+    start_time = db.Column(db.Integer)
     duration = db.Column(db.Float)
     description = db.Column(db.UnicodeText)
     link = db.Column(db.Unicode(length=256))

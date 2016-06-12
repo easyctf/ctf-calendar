@@ -31,7 +31,7 @@ def upgrade():
                     sa.Column('owner_id', sa.Integer(), nullable=True),
                     sa.Column('approved', sa.Boolean(), nullable=True),
                     sa.Column('title', sa.Unicode(length=256), nullable=True),
-                    sa.Column('start_time', sa.DateTime(), nullable=True),
+                    sa.Column('start_time', sa.Integer(), nullable=True),
                     sa.Column('duration', sa.Float(), nullable=True),
                     sa.Column('description', sa.UnicodeText(), nullable=True),
                     sa.Column('link', sa.Unicode(length=256), nullable=True),

@@ -23,7 +23,7 @@ def events_create():
                           link=event_create_form.link.data)
         db.session.add(new_event)
         db.session.commit()
-        return redirect(url_for('.events_list'))
+        return redirect(url_for('.events_all'))
     return render_template('events/create.html', event_create_form=event_create_form)
 
 
@@ -32,7 +32,7 @@ def events_list_json():
     events = Event.query.filter_by().order_by(Event.start_time.desc()).all()
     event_list = []
     for event in events:
-        start_time = int(event.start_time.strftime('%s'))
+        start_time = event.start_time
         obj = {
             'id': event.id,
             'name': event.title,
@@ -91,7 +91,7 @@ def events_approve(event_id):
     return redirect(url_for('.events_unapproved'))
 
 
-@blueprint.route('/events/owned')
+@blueprint.route('/owned')
 @login_required
 def events_owned():
     owned_events = current_user.events
