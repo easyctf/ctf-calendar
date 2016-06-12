@@ -32,13 +32,13 @@ def events_list_json():
     events = Event.query.filter_by().order_by(Event.start_time.desc()).all()
     event_list = []
     for event in events:
-        start_time = int(event.start_time.strftime("%s"))
+        start_time = int(event.start_time.strftime('%s'))
         obj = {
-            "id": event.id,
-            "name": event.title,
-            "startTime": start_time * 1000,
-            "endTime": (start_time + event.duration * 60 * 60) * 1000,
-            "duration": event.duration
+            'id': event.id,
+            'name': event.title,
+            'startTime': start_time * 1000,
+            'endTime': (start_time + event.duration * 60 * 60) * 1000,
+            'duration': event.duration
         }
         event_list.append(obj)
     return json.dumps(event_list)
@@ -48,28 +48,28 @@ def events_list_json():
 @blueprint.route('/all')
 def events_all():
     events = Event.query.filter_by(approved=True).order_by(Event.start_time.desc()).all()
-    return render_template('events/list.html', tab="all", events=events)
+    return render_template('events/list.html', tab='all', events=events)
 
 
 # todo
 @blueprint.route('/upcoming')
 def events_upcoming():
     events = Event.query.filter_by(approved=True).order_by(Event.start_time.desc()).all()
-    return render_template('events/list.html', tab="upcoming", events=events)
+    return render_template('events/list.html', tab='upcoming', events=events)
 
 
 # todo
 @blueprint.route('/past')
 def events_past():
     events = Event.query.filter_by(approved=True).order_by(Event.start_time.desc()).all()
-    return render_template('events/list.html', tab="past", events=events)
+    return render_template('events/list.html', tab='past', events=events)
 
 
 @blueprint.route('/unapproved')
 @admin_required
 def events_unapproved():
     unapproved_events = Event.query.filter_by(approved=False).order_by(Event.start_time.desc()).all()
-    return render_template('events/list.html', tab="unapproved", events=unapproved_events, enabled_actions=['approve'])
+    return render_template('events/list.html', tab='unapproved', events=unapproved_events, enabled_actions=['approve'])
 
 
 @blueprint.route('/<int:event_id>')
@@ -83,11 +83,11 @@ def events_detail(event_id):
 def events_approve(event_id):
     event = Event.query.get_or_404(event_id)
     if event.approved:
-        flash("Event %d already approved!" % event_id)
+        flash('Event %d already approved!' % event_id)
     else:
         event.approved = True
         db.session.commit()
-        flash("Event %d approved!" % event_id)
+        flash('Event %d approved!' % event_id)
     return redirect(url_for('.events_unapproved'))
 
 
@@ -95,4 +95,4 @@ def events_approve(event_id):
 @login_required
 def events_owned():
     owned_events = current_user.events
-    return render_template('events/list.html', tab="owned", events=owned_events)
+    return render_template('events/list.html', tab='owned', events=owned_events)

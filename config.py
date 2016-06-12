@@ -40,4 +40,4 @@ class CalendarConfig:
         return self.SECRET_KEY
 
     def _get_database_url(self):
-        return os.getenv("DATABASE_URL", "")
+        return os.getenv('DATABASE_URL', '')
