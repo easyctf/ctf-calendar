@@ -98,11 +98,11 @@ def events_detail(event_id):
 def events_approve(event_id):
     event = Event.query.get_or_404(event_id)
     if event.approved:
-        flash('Event %d already approved!' % event_id)
+        flash('\'%s\' already approved!' % event.title)
     else:
         event.approved = True
         db.session.commit()
-        flash('Event %d approved!' % event_id)
+        flash('\'%s\' approved!' % event.title)
     return redirect(url_for('.events_unapproved'))
 
 
