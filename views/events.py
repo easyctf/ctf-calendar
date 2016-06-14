@@ -15,12 +15,8 @@ blueprint = Blueprint('events', __name__, template_folder='templates')
 def events_create():
     event_create_form = EventForm()
     if event_create_form.validate_on_submit():
-        new_event = Event(owner=current_user,
-                          title=event_create_form.title.data,
-                          start_time=event_create_form.start_time.data,
-                          duration=event_create_form.duration.data,
-                          description=event_create_form.description.data,
-                          link=event_create_form.link.data)
+        new_event = Event(owner=current_user)
+        event_create_form.populate_obj(new_event)
         db.session.add(new_event)
         db.session.commit()
         return redirect(url_for('.events_owned'))
