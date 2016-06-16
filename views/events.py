@@ -1,9 +1,9 @@
 import json
 
-from flask import Blueprint, redirect, render_template, url_for, flash
+from flask import abort, Blueprint, redirect, render_template, url_for, flash
 from flask_login import current_user, login_required
 
-from forms import EventForm, EventUpdateForm
+from forms import EventForm
 from models import db, Event
 from util import admin_required, isoformat
 
@@ -110,8 +110,10 @@ def events_approve(event_id):
 @login_required
 def events_manage(event_id):
     event = Event.query.get_or_404(event_id)
-    event_manage_form = EventUpdateForm(obj=event)
-    if event_manage_form.validate_on_submit():
-        event_manage_form.populate_obj(event)
-        return redirect(url_for('.events_detail', event_id=event.id))
-    return render_template('events/manage.html', event_manage_form=event_manage_form)
+    if current_user != event.owner:
+        abort(403)
+    event_form = EventForm(obj=event)
+    if event_form.validate_on_submit():
+        event_form.populate_obj(event)
+        return redirect(url_for('.events_detail', event_id=event_id))
+    return render_template('events/manage.html', event_form=event_form)

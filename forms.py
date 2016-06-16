@@ -58,7 +58,3 @@ class EventForm(Form):
     def validate_link(self, field):
         if not any(field.data.startswith(prefix) for prefix in [u'http://', u'https://']):
             raise ValidationError('Invalid link')
-
-
-class EventUpdateForm(EventForm):
-    id = HiddenField()
