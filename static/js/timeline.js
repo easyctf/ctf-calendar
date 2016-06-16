@@ -85,7 +85,7 @@ $(document).ready(function () {
     stopTime = startTime + 30 * 24 * 60 * 60 * 1000;
 
     $.get("/events/list/json", function (data) {
-        data = JSON.parse(data).filter(function(item) { return item.approved == true; });
+        data = JSON.parse(data).filter(function(item) { return item.approved == true && item.endTime > now; });
 
         var daysBetween = 1;
         var time = new Date(startTime);
@@ -111,7 +111,8 @@ $(document).ready(function () {
             var ctfs = [];
             lane.map(function (ctf) {
                 ctfs.push(renderCTF(ctf));
-                $("#upcoming_ctfs").append("<tr><td><a href='/events/" + ctf.id + "'>" + ctf.name + "</a></td><td><time class='timeago' datetime='" + ctf.startTimeFormat + "'>" + ctf.startTimeFormat + "</time></td></tr>");
+                var running = now > ctf.startTime && now < ctf.endTime;
+                $("#upcoming_ctfs").append("<tr><td><a href='/events/" + ctf.id + "'>" + ctf.name + "</a>" + (running ? " <div class='label label-info'>RUNNING</div>" : "") + "</td><td><time class='timeago' datetime='" + ctf.startTimeFormat + "'>" + ctf.startTimeFormat + "</time></td></tr>");
             });
             $("#ctf_schedule .dragscroll").append("<div class='ctfline'>" + ctfs.join("") + "</div>");
         });

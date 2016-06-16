@@ -32,6 +32,7 @@
                 <th>Name</th>
                 <th>Description</th>
                 <th>Date</th>
+                <th>Duration</th>
                 <th>Website</th>
                 {% if enabled_actions %}
                     <th>Actions</th>
@@ -43,6 +44,7 @@
                         <td><a href="{{ url_for('events.events_detail', event_id=event.id) }}">{{ event.title }}</a></td>
                         <td>{{ event.description }}</td>
                         <td><time class="timeago" datetime="{{ event.start_time_format }}">{{ event.start_time_format }}</time></td>
+                        <td>{{ event.duration / 24 }} days</td>
                         <td><a href="{{ event.link }}" target="_blank">Website</a></td>
                         {% if enabled_actions %}
                             <td>
