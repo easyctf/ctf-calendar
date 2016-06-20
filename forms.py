@@ -4,7 +4,7 @@ from flask_wtf import Form
 from sqlalchemy import func
 from wtforms import ValidationError
 from wtforms.fields import *
-from wtforms.validators import InputRequired, Length
+from wtforms.validators import *
 from wtforms.widgets import TextArea
 
 import util
@@ -50,8 +50,8 @@ class RegisterForm(Form):
 
 class EventForm(Form):
     title = StringField('Title', validators=[InputRequired(), Length(max=256)])
-    start_time = IntegerField('Start Time', validators=[InputRequired()])
-    duration = FloatField('Duration (hours)', validators=[InputRequired()])
+    start_time = IntegerField('Start Time', validators=[InputRequired(), NumberRange(min=0, message='Start time must be >0!')])
+    duration = FloatField('Duration (hours)', validators=[InputRequired(), NumberRange(min=0, message='Start time must be >0!')])
     description = StringField('Description', widget=TextArea(), validators=[InputRequired(), Length(max=1024)])
     link = StringField('Link', validators=[InputRequired(), Length(max=256)])
 
