@@ -4,6 +4,7 @@ from flask import Flask
 
 import config
 import views
+from filters import filters
 from models import db, login_manager
 
 app = Flask(__name__, static_url_path='')
@@ -19,3 +20,6 @@ app.register_blueprint(views.users.blueprint)
 
 app.jinja_env.trim_blocks = True
 app.jinja_env.lstrip_blocks = True
+
+for name, func in filters.items():
+    app.add_template_filter(func, name=name)
