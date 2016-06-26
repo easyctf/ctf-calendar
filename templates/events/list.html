@@ -50,19 +50,19 @@
                             <td>
                                 <form>
                                     {% if 'approve' in enabled_actions %}
-                                        <button id="approve_{{ event.id }}" type="submit"
+                                        <button id="approve_{{ event.id }}" class="btn btn-xs btn-success" type="submit"
                                                 formaction="{{ url_for('events.events_approve', event_id=event.id) }}"
                                                 formmethod="post">Approve
                                         </button>
                                     {% endif %}
                                     {% if 'manage' in enabled_actions %}
-                                        <button id="approve_{{ event.id }}" type="submit"
+                                        <button id="approve_{{ event.id }}" class="btn btn-xs btn-primary" type="submit"
                                                 formaction="{{ url_for('events.events_manage', event_id=event.id) }}"
                                                 formmethod="get">Manage
                                         </button>
                                     {% endif %}
                                     {% if 'remove' in enabled_actions %}
-                                        <button id="remove_{{ event.id }}" type="submit"
+                                        <button id="remove_{{ event.id }}" class="btn btn-xs btn-danger" type="submit"
                                                 formaction="{{ url_for('events.events_remove', event_id=event.id) }}"
                                                 formmethod="post">Delete
                                         </button>
