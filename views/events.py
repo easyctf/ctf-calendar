@@ -46,7 +46,7 @@ def events_list_json():
 @blueprint.route('/')
 @blueprint.route('/all')
 def events_all():
-    events = Event.query.filter_by(approved=True).order_by(Event.start_time.desc()).all()
+    events = Event.query.filter_by(approved=True, removed=False).order_by(Event.start_time.desc()).all()
     for event in events:
         event.start_time_format = isoformat(event.start_time)
     return render_template('events/list.html', tab='all', events=events)
@@ -55,7 +55,7 @@ def events_all():
 # todo
 @blueprint.route('/upcoming')
 def events_upcoming():
-    events = Event.query.filter_by(approved=True).order_by(Event.start_time.desc()).all()
+    events = Event.query.filter_by(approved=True, removed=False).order_by(Event.start_time.desc()).all()
     for event in events:
         event.start_time_format = isoformat(event.start_time)
     return render_template('events/list.html', tab='upcoming', events=events)
@@ -64,7 +64,7 @@ def events_upcoming():
 # todo
 @blueprint.route('/past')
 def events_past():
-    events = Event.query.filter_by(approved=True).order_by(Event.start_time.desc()).all()
+    events = Event.query.filter_by(approved=True, removed=False).order_by(Event.start_time.desc()).all()
     for event in events:
         event.start_time_format = isoformat(event.start_time)
     return render_template('events/list.html', tab='past', events=events)
@@ -73,7 +73,7 @@ def events_past():
 @blueprint.route('/unapproved')
 @admin_required
 def events_unapproved():
-    unapproved_events = Event.query.filter_by(approved=False).order_by(Event.start_time.desc()).all()
+    unapproved_events = Event.query.filter_by(approved=False, removed=False).order_by(Event.start_time.desc()).all()
     for event in unapproved_events:
         event.start_time_format = isoformat(event.start_time)
     return render_template('events/list.html', tab='unapproved', events=unapproved_events, enabled_actions=['approve'])
@@ -82,10 +82,10 @@ def events_unapproved():
 @blueprint.route('/owned')
 @login_required
 def events_owned():
-    owned_events = current_user.events
+    owned_events = current_user.events.filter_by(removed=False)
     for event in owned_events:
         event.start_time_format = isoformat(event.start_time)
-    return render_template('events/list.html', tab='owned', events=owned_events, enabled_actions=['manage'])
+    return render_template('events/list.html', tab='owned', events=owned_events, enabled_actions=['manage', 'remove'])
 
 
 @blueprint.route('/<int:event_id>')
@@ -117,4 +117,15 @@ def events_manage(event_id):
     if event_form.validate_on_submit():
         event_form.populate_obj(event)
         return redirect(url_for('.events_detail', event_id=event_id))
-    return render_template('events/manage.html', event_form=event_form)
+    return render_template('events/manage.html', event=event, event_form=event_form)
+
+
+@blueprint.route('/<int:event_id>/delete', methods=['POST'])
+@login_required
+def events_remove(event_id):
+    event = Event.query.get_or_404(event_id)
+    if current_user != event.owner:
+        abort(403)
+    event.removed = True
+    db.session.commit()
+    return redirect(url_for('.events_owned'))

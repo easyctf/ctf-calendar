@@ -63,6 +63,12 @@
                     believes your CTF meets the requirements, may approve your CTF.</p>
                 <p>When your CTF is approved, it will appear in the listing, and will also be added to our
                     newsletter.</p>
+                <form>
+                    <button id="button_remove" class="btn btn-danger" type="submit"
+                            formaction="{{ url_for('events.events_remove', event_id=event.id) }}"
+                            formmethod="post">Delete Event
+                    </button>
+                </form>
             </div>
         </div>
     </div>

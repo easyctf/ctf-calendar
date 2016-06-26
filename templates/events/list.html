@@ -61,6 +61,12 @@
                                                 formmethod="get">Manage
                                         </button>
                                     {% endif %}
+                                    {% if 'remove' in enabled_actions %}
+                                        <button id="remove_{{ event.id }}" type="submit"
+                                                formaction="{{ url_for('events.events_remove', event_id=event.id) }}"
+                                                formmethod="post">Delete
+                                        </button>
+                                    {% endif %}
                                 </form>
                             </td>
                         {% endif %}

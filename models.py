@@ -1,5 +1,6 @@
 from flask_login import LoginManager
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.orm import backref
 from sqlalchemy.ext.hybrid import hybrid_property
 
 import util
@@ -81,13 +82,14 @@ class Event(db.Model):
     __tablename__ = 'events'
     id = db.Column(db.Integer, primary_key=True)
     owner_id = db.Column(db.Integer, db.ForeignKey('users.id', name='event_owner_id_fk'))
-    owner = db.relationship('User', backref='events')
+    owner = db.relationship('User', backref=backref('events', lazy='dynamic'))
     approved = db.Column(db.Boolean, default=False)
     title = db.Column(db.Unicode(length=256))
     start_time = db.Column(db.Integer, index=True)
     duration = db.Column(db.Float)
     description = db.Column(db.UnicodeText)
     link = db.Column(db.Unicode(length=256))
+    removed = db.Column(db.Boolean, default=False)
 
 
 class EventVote(db.Model):
