@@ -1,5 +1,6 @@
 from flask_login import LoginManager
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import UniqueConstraint
 from sqlalchemy.orm import backref
 from sqlalchemy.ext.hybrid import hybrid_property
 
@@ -95,6 +96,9 @@ class Event(db.Model):
 class EventVote(db.Model):
     __tablename__ = 'eventvotes'
     id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id', name='eventvote_user_id_fk'))
+    user = db.relationship('User', backref='event_votes')
     event_id = db.Column(db.Integer, db.ForeignKey('events.id', name='vote_event_id_fk'), index=True)
     event = db.relationship('Event', backref='votes')
     direction = db.Column(db.Boolean)
+    __table_args__ = (UniqueConstraint('user_id', 'event_id', name='eventvote_user_event_uc'),)
