@@ -23,9 +23,10 @@ def authorize(*args, **kwargs):
 @blueprint.route('/token')
 @oauth.token_handler
 def access_token():
-    return None
+    pass
 
 
 @blueprint.route('/revoke', methods=['POST'])
 @oauth.revoke_handler
-def revoke_token(): pass
+def revoke_token():
+    pass
