@@ -9,7 +9,7 @@
     <br/>
     Start: {{ event.start_time }}
     <br/>
-    Duration: {{ event.duration }}
+    Duration: {{ event.duration|duration('hour') }}
     <br/>
     Link: <a href="{{ event.link }}">link</a>
     <br/>

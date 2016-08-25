@@ -1,5 +1,7 @@
 from flask_login import LoginManager
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import UniqueConstraint
+from sqlalchemy.orm import backref
 from sqlalchemy.ext.hybrid import hybrid_property
 
 import util
@@ -81,18 +83,22 @@ class Event(db.Model):
     __tablename__ = 'events'
     id = db.Column(db.Integer, primary_key=True)
     owner_id = db.Column(db.Integer, db.ForeignKey('users.id', name='event_owner_id_fk'))
-    owner = db.relationship('User', backref='events')
+    owner = db.relationship('User', backref=backref('events', lazy='dynamic'))
     approved = db.Column(db.Boolean, default=False)
     title = db.Column(db.Unicode(length=256))
     start_time = db.Column(db.Integer, index=True)
     duration = db.Column(db.Float)
     description = db.Column(db.UnicodeText)
     link = db.Column(db.Unicode(length=256))
+    removed = db.Column(db.Boolean, default=False)
 
 
 class EventVote(db.Model):
     __tablename__ = 'eventvotes'
     id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id', name='eventvote_user_id_fk'))
+    user = db.relationship('User', backref='event_votes')
     event_id = db.Column(db.Integer, db.ForeignKey('events.id', name='vote_event_id_fk'), index=True)
     event = db.relationship('Event', backref='votes')
     direction = db.Column(db.Boolean)
+    __table_args__ = (UniqueConstraint('user_id', 'event_id', name='eventvote_user_event_uc'),)

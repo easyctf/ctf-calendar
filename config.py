@@ -28,7 +28,7 @@ class CalendarConfig:
             self.SECRET_KEY = os.environ['SECRET_KEY']
         else:
             secret_path = self.app_root / '.secret_key'
-            with secret_path.open('a+b') as secret_file:
+            with secret_path.open('rb') as secret_file:
                 secret_file.seek(0)
                 contents = secret_file.read()
                 if not contents and len(contents) == 0:

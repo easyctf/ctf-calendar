@@ -12,13 +12,13 @@
                     <h2 class="panel-title">Manage Event</h2>
                 </div>
                 <div class="panel-body">
-                    <form class="form-horizontal" method="POST" id="event_manage_form">
-                        {{ event_manage_form.csrf_token }}
-                        {% if event_manage_form.errors %}
+                    <form class="form-horizontal" method="POST" id="event_form">
+                        {{ event_form.csrf_token }}
+                        {% if event_form.errors %}
                             <div class="alert alert-danger">
                                 <ul>
                                     Please correct the following errors.
-                                    {% for field in event_manage_form %}
+                                    {% for field in event_form %}
                                         {% if field.errors %}
                                             {% for error in field.errors %}
                                                 <li>{{ error }}</li>
@@ -32,8 +32,7 @@
                             <div id="login_msg"></div>
                         </fieldset>
                         <fieldset class="container-fluid">
-                            {{ event_manage_form.id() }}
-                            {% for field in event_manage_form if field.id != 'csrf_token' and field.id != 'id' %}
+                            {% for field in event_form if field.id != 'csrf_token' and field.id != 'id' %}
                                 <div class="row">
                                     <div class="col-sm-12 form-group">
                                         {{ field.label(class_="col-sm-3 control-label") }}
@@ -65,6 +64,12 @@
                     believes your CTF meets the requirements, may approve your CTF.</p>
                 <p>When your CTF is approved, it will appear in the listing, and will also be added to our
                     newsletter.</p>
+                <form>
+                    <button id="button_remove" class="btn btn-danger" type="submit"
+                            formaction="{{ url_for('events.events_remove', event_id=event.id) }}"
+                            formmethod="post">Delete Event
+                    </button>
+                </form>
             </div>
         </div>
     </div>
