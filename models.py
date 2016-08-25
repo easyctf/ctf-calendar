@@ -1,12 +1,12 @@
+from datetime import datetime, timedelta
+
 from flask_login import current_user, LoginManager
 from flask_oauthlib.provider import OAuth2Provider
 from flask_sqlalchemy import SQLAlchemy
-
 from sqlalchemy import UniqueConstraint
-from sqlalchemy.orm import backref
 from sqlalchemy.ext.hybrid import hybrid_property
+from sqlalchemy.orm import backref
 
-from datetime import datetime, timedelta
 import util
 
 db = SQLAlchemy()
@@ -97,9 +97,9 @@ class Event(db.Model):
     removed = db.Column(db.Boolean, default=False)
 
     # OAuth2 stuff
-    client_id = db.Column(db.String(40), unique=True)
-    client_secret = db.Column(db.String(55), unique=True, index=True, nullable=False)
-    is_confidential = db.Column(db.Boolean)
+    client_id = db.Column(db.String(40), unique=True, default=util.generate_string(16))
+    client_secret = db.Column(db.String(55), unique=True, index=True, nullable=False, default=util.generate_string(32))
+    is_confidential = db.Column(db.Boolean, default=True)
     _redirect_uris = db.Column(db.Text)
     _default_scopes = db.Column(db.Text)
 
@@ -195,6 +195,7 @@ class Token(db.Model):
             return self._scopes.split()
         return []
 
+
 def get_current_user():
     if current_user:
         return current_user
@@ -209,6 +210,7 @@ def load_client(client_id):
 @oauth.grantgetter
 def load_grant(client_id, code):
     return Grant.query.filter_by(client_id=client_id, code=code).first()
+
 
 @oauth.grantsetter
 def save_grant(client_id, code, request, *args, **kwargs):

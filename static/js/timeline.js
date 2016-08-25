@@ -85,7 +85,9 @@ $(document).ready(function () {
     stopTime = startTime + 30 * 24 * 60 * 60 * 1000;
 
     $.get("/events/list/json", function (data) {
-        data = JSON.parse(data).filter(function(item) { return item.approved == true && item.endTime > now; });
+        data = JSON.parse(data).filter(function (item) {
+            return item.approved == true && item.endTime > now;
+        });
 
         var daysBetween = 1;
         var time = new Date(startTime);

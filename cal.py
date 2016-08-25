@@ -1,7 +1,6 @@
 import os
 
 from flask import Flask
-from flask_oauthlib.provider import OAuth2Provider
 
 import config
 import views

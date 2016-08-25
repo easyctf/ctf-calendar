@@ -1,9 +1,10 @@
-from flask import Blueprint, request
+from flask import Blueprint, request, render_template
 from flask_login import login_required
 
-from models import db, oauth, Event
+from models import oauth, Event
 
 blueprint = Blueprint('oauth', __name__, template_folder='templates')
+
 
 @blueprint.route('/authorize', methods=['GET', 'POST'])
 @login_required

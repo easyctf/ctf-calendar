@@ -1,5 +1,3 @@
-from datetime import datetime
-
 from flask_wtf import Form
 from sqlalchemy import func
 from wtforms import ValidationError
@@ -32,8 +30,10 @@ class LoginForm(Form):
 
 class RegisterForm(Form):
     email = StringField('Email', validators=[InputRequired()])
-    username = StringField('Username', validators=[InputRequired(), Length(min=4, max=16, message='Username must be between 4 and 16 characters long.')])
-    password = PasswordField('Password', validators=[InputRequired(), Length(min=8, max=56, message='Password must be between 8 and 56 characters long.')])
+    username = StringField('Username', validators=[InputRequired(), Length(min=4, max=16,
+                                                                           message='Username must be between 4 and 16 characters long.')])
+    password = PasswordField('Password', validators=[InputRequired(), Length(min=8, max=56,
+                                                                             message='Password must be between 8 and 56 characters long.')])
 
     def validate_email(self, field):
         if not util.validate_email_format(field.data):
@@ -51,9 +51,11 @@ class RegisterForm(Form):
 class EventForm(Form):
     title = StringField('Title', validators=[InputRequired(), Length(max=256)])
     start_time = IntegerField('Start Time',
-                              validators=[InputRequired(), NumberRange(min=0, max=2147483647, message='Start time must be between 0 and 2147483647!')])
+                              validators=[InputRequired(), NumberRange(min=0, max=2147483647,
+                                                                       message='Start time must be between 0 and 2147483647!')])
     duration = FloatField('Duration (hours)',
-                          validators=[InputRequired(), NumberRange(min=0, max=2147483647, message='Duration must be between 0 and 2147483647!')])
+                          validators=[InputRequired(), NumberRange(min=0, max=2147483647,
+                                                                   message='Duration must be between 0 and 2147483647!')])
     description = StringField('Description', widget=TextArea(), validators=[InputRequired(), Length(max=1024)])
     link = StringField('Link', validators=[InputRequired(), Length(max=256)])
 

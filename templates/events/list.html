@@ -12,7 +12,8 @@
             </li>
             {% if current_user.admin %}
                 <li role="presentation"{% if tab == "unapproved" %} class="active"{% endif %}>
-                    <a href="{{ url_for('events.events_unapproved') }}" aria-controls="settings" role="tab">Unapproved</a>
+                    <a href="{{ url_for('events.events_unapproved') }}" aria-controls="settings"
+                       role="tab">Unapproved</a>
                 </li>
             {% endif %}
             <li role="presentation"{% if tab == "upcoming" %} class="active"{% endif %}>
@@ -29,55 +30,58 @@
         </ul>
         <table class="table table-hover table-striped">
             <thead>
-                <th>Name</th>
-                <th>Description</th>
-                <th>Date</th>
-                <th>Duration</th>
-                <th>Website</th>
-                {% if enabled_actions %}
-                    <th>Actions</th>
-                {% endif %}
+            <th>Name</th>
+            <th>Description</th>
+            <th>Date</th>
+            <th>Duration</th>
+            <th>Website</th>
+            {% if enabled_actions %}
+                <th>Actions</th>
+            {% endif %}
             </thead>
             <tbody>
-                {% for event in events %}
-                    <tr id="event_{{ event.id }}">
-                        <td><a href="{{ url_for('events.events_detail', event_id=event.id) }}">{{ event.title }}</a></td>
-                        <td>{{ event.description }}</td>
-                        <td><time class="timeago" datetime="{{ event.start_time_format }}">{{ event.start_time_format }}</time></td>
-                        <td>{{ event.duration|duration('hour') }}</td>
-                        <td><a href="{{ event.link }}" target="_blank">Website</a></td>
-                        {% if enabled_actions %}
-                            <td>
-                                <form>
-                                    {% if 'approve' in enabled_actions %}
-                                        <button id="approve_{{ event.id }}" class="btn btn-xs btn-success" type="submit"
-                                                formaction="{{ url_for('events.events_approve', event_id=event.id) }}"
-                                                formmethod="post">Approve
-                                        </button>
-                                    {% endif %}
-                                    {% if 'manage' in enabled_actions %}
-                                        <button id="approve_{{ event.id }}" class="btn btn-xs btn-primary" type="submit"
-                                                formaction="{{ url_for('events.events_manage', event_id=event.id) }}"
-                                                formmethod="get">Manage
-                                        </button>
-                                    {% endif %}
-                                    {% if 'remove' in enabled_actions %}
-                                        <button id="remove_{{ event.id }}" class="btn btn-xs btn-danger" type="submit"
-                                                formaction="{{ url_for('events.events_remove', event_id=event.id) }}"
-                                                formmethod="post">Delete
-                                        </button>
-                                    {% endif %}
-                                </form>
-                            </td>
-                        {% endif %}
-                    </tr>
-                {% endfor %}
+            {% for event in events %}
+                <tr id="event_{{ event.id }}">
+                    <td><a href="{{ url_for('events.events_detail', event_id=event.id) }}">{{ event.title }}</a></td>
+                    <td>{{ event.description }}</td>
+                    <td>
+                        <time class="timeago"
+                              datetime="{{ event.start_time_format }}">{{ event.start_time_format }}</time>
+                    </td>
+                    <td>{{ event.duration|duration('hour') }}</td>
+                    <td><a href="{{ event.link }}" target="_blank">Website</a></td>
+                    {% if enabled_actions %}
+                        <td>
+                            <form>
+                                {% if 'approve' in enabled_actions %}
+                                    <button id="approve_{{ event.id }}" class="btn btn-xs btn-success" type="submit"
+                                            formaction="{{ url_for('events.events_approve', event_id=event.id) }}"
+                                            formmethod="post">Approve
+                                    </button>
+                                {% endif %}
+                                {% if 'manage' in enabled_actions %}
+                                    <button id="approve_{{ event.id }}" class="btn btn-xs btn-primary" type="submit"
+                                            formaction="{{ url_for('events.events_manage', event_id=event.id) }}"
+                                            formmethod="get">Manage
+                                    </button>
+                                {% endif %}
+                                {% if 'remove' in enabled_actions %}
+                                    <button id="remove_{{ event.id }}" class="btn btn-xs btn-danger" type="submit"
+                                            formaction="{{ url_for('events.events_remove', event_id=event.id) }}"
+                                            formmethod="post">Delete
+                                    </button>
+                                {% endif %}
+                            </form>
+                        </td>
+                    {% endif %}
+                </tr>
+            {% endfor %}
             </tbody>
         </table>
     </div>
 
     <script type="text/javascript">
-        $(document).ready(function() {
+        $(document).ready(function () {
             $.timeago.settings.allowFuture = true;
             $('.timeago').timeago();
         });
