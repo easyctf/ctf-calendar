@@ -3,6 +3,7 @@ bcrypt
 Flask
 Flask-Login
 Flask-Migrate
+Flask-OAuthlib
 Flask-Script
 Flask-SQLAlchemy
 Flask-WTF

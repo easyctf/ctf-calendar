@@ -3,3 +3,4 @@
 .idea
 .env
 .secret_key
+npm-debug.log

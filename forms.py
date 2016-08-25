@@ -32,8 +32,8 @@ class LoginForm(Form):
 
 class RegisterForm(Form):
     email = StringField('Email', validators=[InputRequired()])
-    username = StringField('Username', validators=[InputRequired(), Length(min=4, max=128)])
-    password = PasswordField('Password', validators=[InputRequired(), Length(min=8, max=56)])
+    username = StringField('Username', validators=[InputRequired(), Length(min=4, max=16, message='Username must be between 4 and 16 characters long.')])
+    password = PasswordField('Password', validators=[InputRequired(), Length(min=8, max=56, message='Password must be between 8 and 56 characters long.')])
 
     def validate_email(self, field):
         if not util.validate_email_format(field.data):

@@ -17,6 +17,7 @@ class CalendarConfig:
         self._load_secret_key()
         self.SQLALCHEMY_DATABASE_URI = self._get_database_url()
         self.SQLALCHEMY_TRACK_MODIFICATIONS = False
+        self.TEMPLATES_AUTO_RELOAD = True
 
         if testing:
             self.TESTING = True
