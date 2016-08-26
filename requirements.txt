@@ -16,3 +16,4 @@ pymysql
 python-dotenv
 sqlalchemy
 wtforms
+wtforms_components

@@ -14,7 +14,7 @@ def authorize(*args, **kwargs):
         client_id = kwargs.get('client_id')
         client = Event.query.filter_by(client_id=client_id).first()
         kwargs['client'] = client
-        return render_template('oauthorize.html', **kwargs)
+        return render_template('users/oauthorize.html', **kwargs)
 
     confirm = request.form.get('confirm', 'no')
     return confirm == 'yes'
