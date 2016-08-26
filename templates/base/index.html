@@ -5,36 +5,51 @@
 {% endblock %}
 
 {% block content %}
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h4 class="panel-title">Upcoming Events Calendar</h4>
-        </div>
-        <div class="panel-body" id="timeline">
-            <div id="ctf_schedule">
-                <div class="schedule dragscroll">
-                    <div class="timeline"></div>
-                </div>
+    <style>
+        .ctf-info td, .ctf-info th {
+            padding: 5px 10px;
+        }
+    </style>
+    <div class="row">
+        <div class="col-md-9">
+            <div class="page-header">
+                <h2>Upcoming Events</h2>
             </div>
+            {% for event in events %}
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <center>
+                            <h2>{{ event.title }}</h2>
+                            <small><span data-livestamp="{{ event.start_time }}"></span></small>
+                        </center>
+                    </div>
+                    <div class="panel-body">
+                        <center style="width: 75%; margin: auto;">
+                            <table class="ctf-info">
+                                <tr>
+                                    <th>Website</th>
+                                    <td><a href="{{ event.link }}" target="_blank">{{ event.link }}</a></td>
+                                </tr>
+                            </table>
+                            <p>{{ event.description }}</p>
+                        </center>
+                    </div>
+                </div>
+            {% endfor %}
         </div>
-    </div>
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h4 class="panel-title">Upcoming Events
-                <span class="pull-right"><a href="/events/upcoming">More &raquo;</a></span>
-            </h4>
+        <div class="col-md-3">
+            Some Sidebar
         </div>
-        <table class="table table-hover table-striped">
-            <thead>
-                <th>Name</th>
-                <th>Date</th>
-            </head>
-            <tbody id="upcoming_ctfs"></tbody>
-        </table>
     </div>
 
+    <script src="http://momentjs.com/downloads/moment.min.js"
+            integrity="sha384-ohw6o2vy/chIavW0iVsUoWaIPmAnF9VKjEMSusADB79PrE3CdeJhvR84BjcynjVl"
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.rawgit.com/mattbradley/livestampjs/1.1.2/livestamp.min.js"
+            integrity="sha384-3w5S8eBXk/lb0z05Hu52Nal4FV5PNERXScY2BXGqwiaMURz8I5urTaOU6JMYodVi"
+            crossorigin="anonymous"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='/js/dragscroll.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='/js/jquery.infinitescroll.min.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='/js/timeline.js') }}"></script>
 {% endblock %}
 
 {% block sidebar %}

@@ -5,7 +5,7 @@ from flask import Flask
 import config
 import views
 from filters import filters
-from models import db, login_manager
+from models import db, login_manager, oauth
 
 app = Flask(__name__, static_url_path='')
 self_path = os.path.dirname(os.path.abspath(__file__))
@@ -13,9 +13,11 @@ app.config.from_object(config.CalendarConfig(app_root=self_path))
 db.init_app(app)
 
 login_manager.init_app(app)
+oauth.init_app(app)
 
 app.register_blueprint(views.base.blueprint)
 app.register_blueprint(views.events.blueprint, url_prefix='/events')
+app.register_blueprint(views.oauth.blueprint, url_prefix='/oauth')
 app.register_blueprint(views.users.blueprint)
 
 app.jinja_env.trim_blocks = True

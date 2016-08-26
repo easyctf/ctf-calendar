@@ -1,4 +1,5 @@
 import datetime
+import random
 import re
 from functools import wraps
 
@@ -9,6 +10,10 @@ from passlib.hash import bcrypt
 
 def isoformat(seconds):
     return datetime.datetime.fromtimestamp(seconds).isoformat() + "Z"
+
+
+def generate_string(length=32, alpha='0123456789abcdef'):
+    return "".join([random.choice(alpha) for x in range(length)])
 
 
 def hash_password(password, rounds=10):
