@@ -92,7 +92,7 @@ class Event(db.Model):
     approved = db.Column(db.Boolean, default=False)
     title = db.Column(db.Unicode(length=256))
     start_time = db.Column(db.Integer, index=True)
-    duration = db.Column(db.Float)
+    duration = db.Column(db.Float)  # in hours
     description = db.Column(db.UnicodeText)
     link = db.Column(db.Unicode(length=256))
     removed = db.Column(db.Boolean, default=False)
@@ -107,6 +107,14 @@ class Event(db.Model):
     @property
     def formatted_start_time(self):
         return util.isoformat(self.start_time)
+
+    @hybrid_property
+    def end_time(self):
+        return self.start_time + self.duration * 60
+
+    @property
+    def formatted_end_time(self):
+        return util.isoformat(self.end_time)
 
     @property
     def client_type(self):
