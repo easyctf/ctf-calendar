@@ -1,6 +1,7 @@
-from flask import Blueprint, render_template, redirect, url_for, send_file
+from flask import abort, Blueprint, render_template, redirect, url_for, send_file
 from flask_login import current_user, login_required, login_user, logout_user
 
+import config
 from forms import LoginForm, RegisterForm
 from models import db
 from models import login_manager, User
@@ -52,9 +53,18 @@ def profile():
 
 
 @blueprint.route('/users')
-def users_list():
-    users = User.query.order_by(User.id).all()
-    return render_template('users/list.html', users=users)
+@blueprint.route('/users/<int:page_number>')
+def users_list(page_number=1):
+    if page_number <= 0:
+        abort(404)
+
+    page_size = config.USER_LIST_PAGE_SIZE
+    page_offset = (page_number - 1) * page_size
+    users = User.query.order_by(User.id).order_by(User.id.desc()).offset(page_offset).limit(page_size)
+    if page_number != 1 and not users:
+        abort(404)
+
+    return render_template('users/list.html', page_number=page_number, users=users)
 
 
 @blueprint.route('/users/<int:user_id>')
