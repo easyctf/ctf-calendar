@@ -1,4 +1,5 @@
 import json
+import time
 
 from flask import abort, Blueprint, redirect, render_template, url_for, flash
 from flask_login import current_user, login_required
@@ -73,8 +74,8 @@ def events_upcoming(page_number=1):
 
     page_size = config.EVENT_LIST_PAGE_SIZE
     page_offset = (page_number - 1) * page_size
-    upcoming_events = Event.query.filter_by(approved=True, removed=False).order_by(Event.start_time.desc()) \
-        .offset(page_offset).limit(page_size)
+    upcoming_events = Event.query.filter_by(approved=True, removed=False).filter(Event.start_time > time.time()) \
+        .order_by(Event.start_time.desc()).offset(page_offset).limit(page_size)
     if page_number != 1 and not upcoming_events:
         abort(404)
     return render_template('events/list.html', tab='upcoming', page_number=page_number, events=upcoming_events)
@@ -89,8 +90,8 @@ def events_past(page_number=1):
 
     page_size = config.EVENT_LIST_PAGE_SIZE
     page_offset = (page_number - 1) * page_size
-    past_events = Event.query.filter_by(approved=True, removed=False).order_by(Event.start_time.desc()) \
-        .offset(page_offset).limit(page_size)
+    past_events = Event.query.filter_by(approved=True, removed=False).filter(Event.end_time <= time.time()) \
+        .order_by(Event.start_time.desc()).offset(page_offset).limit(page_size)
     if page_number != 1 and not past_events:
         abort(404)
     return render_template('events/list.html', tab='past', page_number=page_number, events=past_events)
