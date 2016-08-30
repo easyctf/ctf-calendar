@@ -104,6 +104,10 @@ class Event(db.Model):
     _default_scopes = db.Column(db.Text)
 
     @property
+    def formatted_start_time(self):
+        return util.isoformat(self.start_time)
+
+    @property
     def client_type(self):
         if self.is_confidential:
             return 'confidential'

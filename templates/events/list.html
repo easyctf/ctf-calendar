@@ -46,7 +46,7 @@
                     <td>{{ event.description }}</td>
                     <td>
                         <time class="timeago"
-                              datetime="{{ event.start_time_format }}">{{ event.start_time_format }}</time>
+                              datetime="{{ event.formatted_start_time }}">{{ event.formatted_start_time }}</time>
                     </td>
                     <td>{{ event.duration|duration('hour') }}</td>
                     <td><a href="{{ event.link }}" target="_blank">Website</a></td>

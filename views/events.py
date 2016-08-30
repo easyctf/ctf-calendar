@@ -58,12 +58,9 @@ def events_all(page_number=1):
     page_size = config.EVENT_LIST_PAGE_SIZE
     page_offset = (page_number - 1) * page_size
     events = Event.query.filter_by(approved=True, removed=False).order_by(Event.start_time.desc()) \
-        .offset(page_offset).limit(page_size).all()
+        .offset(page_offset).limit(page_size)
     if page_number != 1 and not events:
         abort(404)
-
-    for event in events:
-        event.start_time_format = isoformat(event.start_time)
     return render_template('events/list.html', tab='all', page_number=page_number, events=events)
 
 
@@ -77,12 +74,9 @@ def events_upcoming(page_number=1):
     page_size = config.EVENT_LIST_PAGE_SIZE
     page_offset = (page_number - 1) * page_size
     upcoming_events = Event.query.filter_by(approved=True, removed=False).order_by(Event.start_time.desc()) \
-        .offset(page_offset).limit(page_size).all()
+        .offset(page_offset).limit(page_size)
     if page_number != 1 and not upcoming_events:
         abort(404)
-
-    for event in upcoming_events:
-        event.start_time_format = isoformat(event.start_time)
     return render_template('events/list.html', tab='upcoming', page_number=page_number, events=upcoming_events)
 
 
@@ -96,12 +90,9 @@ def events_past(page_number=1):
     page_size = config.EVENT_LIST_PAGE_SIZE
     page_offset = (page_number - 1) * page_size
     past_events = Event.query.filter_by(approved=True, removed=False).order_by(Event.start_time.desc()) \
-        .offset(page_offset).limit(page_size).all()
+        .offset(page_offset).limit(page_size)
     if page_number != 1 and not past_events:
         abort(404)
-
-    for event in past_events:
-        event.start_time_format = isoformat(event.start_time)
     return render_template('events/list.html', tab='past', page_number=page_number, events=past_events)
 
 
@@ -115,12 +106,9 @@ def events_unapproved(page_number=1):
     page_size = config.EVENT_LIST_PAGE_SIZE
     page_offset = (page_number - 1) * page_size
     unapproved_events = Event.query.filter_by(approved=False, removed=False).order_by(Event.start_time.desc()) \
-        .offset(page_offset).limit(page_size).all()
+        .offset(page_offset).limit(page_size)
     if page_number != 1 and not unapproved_events:
         abort(404)
-
-    for event in unapproved_events:
-        event.start_time_format = isoformat(event.start_time)
     return render_template('events/list.html', tab='unapproved', page_number=page_number, events=unapproved_events,
                            enabled_actions=['approve'])
 
@@ -138,9 +126,6 @@ def events_owned(page_number=1):
         .offset(page_offset).limit(page_size).all()
     if page_number != 1 and not owned_events:
         abort(404)
-
-    for event in owned_events:
-        event.start_time_format = isoformat(event.start_time)
     return render_template('events/list.html', tab='owned', page_number=page_number, events=owned_events,
                            enabled_actions=['manage', 'remove'])
 
