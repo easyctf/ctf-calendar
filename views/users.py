@@ -60,11 +60,15 @@ def users_list(page_number=1):
 
     page_size = config.USER_LIST_PAGE_SIZE
     page_offset = (page_number - 1) * page_size
-    users = User.query.order_by(User.id).order_by(User.id.desc()).offset(page_offset).limit(page_size).all()
+    users = User.query.order_by(User.id).order_by(User.id.desc()).offset(page_offset).limit(page_size + 1).all()
     if page_number != 1 and not users:
         abort(404)
 
-    return render_template('users/list.html', page_number=page_number, users=users)
+    last_page = len(users) <= page_size
+    if not last_page:
+        users.pop()
+
+    return render_template('users/list.html', page_number=page_number, last_page=last_page, users=users)
 
 
 @blueprint.route('/users/<int:user_id>')
