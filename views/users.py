@@ -47,14 +47,14 @@ def profile():
 
 
 @blueprint.route('/users')
-@blueprint.route('/users/<int:page_number>')
+@blueprint.route('/users/page/<int:page_number>')
 def users_list(page_number=1):
     if page_number <= 0:
         abort(404)
 
     page_size = config.USER_LIST_PAGE_SIZE
     page_offset = (page_number - 1) * page_size
-    users = User.query.order_by(User.id).order_by(User.id.desc()).offset(page_offset).limit(page_size)
+    users = User.query.order_by(User.id).order_by(User.id.desc()).offset(page_offset).limit(page_size).all()
     if page_number != 1 and not users:
         abort(404)
 
