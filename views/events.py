@@ -58,11 +58,17 @@ def events_all(page_number=1):
 
     page_size = config.EVENT_LIST_PAGE_SIZE
     page_offset = (page_number - 1) * page_size
+    # Offset + limit for pagination is inefficient; implement page_start based pages if perf issues.
     events = Event.query.filter_by(approved=True, removed=False).order_by(Event.start_time.desc()) \
-        .offset(page_offset).limit(page_size).all()
+        .offset(page_offset).limit(page_size + 1).all()
     if page_number != 1 and not events:
         abort(404)
-    return render_template('events/list.html', tab='all', page_number=page_number, events=events)
+
+    last_page = len(events) <= page_size
+    if not last_page:
+        events.pop()
+
+    return render_template('events/list.html', tab='all', page_number=page_number, last_page=last_page, events=events)
 
 
 # todo
@@ -75,10 +81,16 @@ def events_upcoming(page_number=1):
     page_size = config.EVENT_LIST_PAGE_SIZE
     page_offset = (page_number - 1) * page_size
     upcoming_events = Event.query.filter_by(approved=True, removed=False).filter(Event.start_time > time.time()) \
-        .order_by(Event.start_time.desc()).offset(page_offset).limit(page_size).all()
+        .order_by(Event.start_time.desc()).offset(page_offset).limit(page_size + 1).all()
     if page_number != 1 and not upcoming_events:
         abort(404)
-    return render_template('events/list.html', tab='upcoming', page_number=page_number, events=upcoming_events)
+
+    last_page = len(upcoming_events) <= page_size
+    if not last_page:
+        upcoming_events.pop()
+
+    return render_template('events/list.html', tab='upcoming', page_number=page_number, last_page=last_page,
+                           events=upcoming_events)
 
 
 # todo
@@ -91,10 +103,16 @@ def events_past(page_number=1):
     page_size = config.EVENT_LIST_PAGE_SIZE
     page_offset = (page_number - 1) * page_size
     past_events = Event.query.filter_by(approved=True, removed=False).filter(Event.end_time <= time.time()) \
-        .order_by(Event.start_time.desc()).offset(page_offset).limit(page_size).all()
+        .order_by(Event.start_time.desc()).offset(page_offset).limit(page_size + 1).all()
     if page_number != 1 and not past_events:
         abort(404)
-    return render_template('events/list.html', tab='past', page_number=page_number, events=past_events)
+
+    last_page = len(past_events) <= page_size
+    if not last_page:
+        past_events.pop()
+
+    return render_template('events/list.html', tab='past', page_number=page_number, last_page=last_page,
+                           events=past_events)
 
 
 @blueprint.route('/unapproved')
@@ -107,11 +125,16 @@ def events_unapproved(page_number=1):
     page_size = config.EVENT_LIST_PAGE_SIZE
     page_offset = (page_number - 1) * page_size
     unapproved_events = Event.query.filter_by(approved=False, removed=False).order_by(Event.start_time.desc()) \
-        .offset(page_offset).limit(page_size).all()
+        .offset(page_offset).limit(page_size + 1).all()
     if page_number != 1 and not unapproved_events:
         abort(404)
-    return render_template('events/list.html', tab='unapproved', page_number=page_number, events=unapproved_events,
-                           enabled_actions=['approve'])
+
+    last_page = len(unapproved_events) <= page_size
+    if not last_page:
+        unapproved_events.pop()
+
+    return render_template('events/list.html', tab='unapproved', page_number=page_number, last_page=last_page,
+                           events=unapproved_events, enabled_actions=['approve'])
 
 
 @blueprint.route('/owned')
@@ -124,11 +147,16 @@ def events_owned(page_number=1):
     page_size = config.EVENT_LIST_PAGE_SIZE
     page_offset = (page_number - 1) * page_size
     owned_events = current_user.events.filter_by(removed=False).order_by(Event.start_time.desc()) \
-        .offset(page_offset).limit(page_size).all()
+        .offset(page_offset).limit(page_size + 1).all()
     if page_number != 1 and not owned_events:
         abort(404)
-    return render_template('events/list.html', tab='owned', page_number=page_number, events=owned_events,
-                           enabled_actions=['manage', 'remove'])
+
+    last_page = len(owned_events) <= page_size
+    if not last_page:
+        owned_events.pop()
+
+    return render_template('events/list.html', tab='owned', page_number=page_number, last_page=last_page,
+                           events=owned_events, enabled_actions=['manage', 'remove'])
 
 
 @blueprint.route('/<int:event_id>')

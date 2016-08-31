@@ -17,8 +17,10 @@
     {% endfor %}
 
     <p>
-        {% if page_number == 1 %}Prev{% else %}<a href="/users/page/{{ page_number - 1 }}">Prev</a>{% endif %}
+        {% if page_number == 1 %}Prev{% else %}
+            <a href="{{ url_for('users.users_list', page_number=page_number - 1) }}">Prev</a>{% endif %}
         / Page <b>{{ page_number }}</b> /
-        <a href="/users/page/{{ page_number + 1 }}">Next</a>
+        {% if last_page %}Next{% else %}
+            <a href="{{ url_for('users.users_list', page_number=page_number + 1) }}">Next</a>{% endif %}
     </p>
 {% endblock %}
