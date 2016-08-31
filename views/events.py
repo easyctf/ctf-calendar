@@ -26,7 +26,7 @@ def events_create():
 
 
 @blueprint.route('/list/json')
-@blueprint.route('/list/json/<int:page_number>')
+@blueprint.route('/list/json/page/<int:page_number>')
 def events_list_json(page_number=1):
     if page_number <= 0:
         abort(404)
@@ -51,7 +51,7 @@ def events_list_json(page_number=1):
 
 @blueprint.route('/')
 @blueprint.route('/all')
-@blueprint.route('/all/<int:page_number>')
+@blueprint.route('/all/page/<int:page_number>')
 def events_all(page_number=1):
     if page_number <= 0:
         abort(404)
@@ -73,7 +73,7 @@ def events_all(page_number=1):
 
 # todo
 @blueprint.route('/upcoming')
-@blueprint.route('/upcoming/<int:page_number>')
+@blueprint.route('/upcoming/page/<int:page_number>')
 def events_upcoming(page_number=1):
     if page_number <= 0:
         abort(404)
@@ -95,7 +95,7 @@ def events_upcoming(page_number=1):
 
 # todo
 @blueprint.route('/past')
-@blueprint.route('/past/<int:page_number>')
+@blueprint.route('/past/page/<int:page_number>')
 def events_past(page_number=1):
     if page_number <= 0:
         abort(404)
@@ -116,7 +116,7 @@ def events_past(page_number=1):
 
 
 @blueprint.route('/unapproved')
-@blueprint.route('/unapproved/<int:page_number>')
+@blueprint.route('/unapproved/page/<int:page_number>')
 @admin_required
 def events_unapproved(page_number=1):
     if page_number <= 0:
@@ -138,7 +138,7 @@ def events_unapproved(page_number=1):
 
 
 @blueprint.route('/owned')
-@blueprint.route('/owned/<int:page_number>')
+@blueprint.route('/owned/page/<int:page_number>')
 @login_required
 def events_owned(page_number=1):
     if page_number <= 0:
