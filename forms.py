@@ -50,9 +50,9 @@ class RegisterForm(Form):
 
 class EventForm(Form):
     title = StringField('Title', validators=[InputRequired(), Length(max=256)])
-    start_time = IntegerField('Start Time', validators=[InputRequired(), NumberRange(min=0, max=2147483647,
+    start_time = IntegerField('Start Time (UNIX Time)', validators=[InputRequired(), NumberRange(min=0, max=2147483647,
                                                                                      message='Start time must be between 0 and 2147483647!')])
-    duration = FloatField('Duration (hours)', validators=[InputRequired(), NumberRange(min=0, max=2147483647,
+    duration = FloatField('Duration (Hours)', validators=[InputRequired(), NumberRange(min=0, max=2147483647,
                                                                                        message='Duration must be between 0 and 2147483647!')])
     description = StringField('Description', widget=TextArea(), validators=[InputRequired(), Length(max=1024)])
     link = StringField('Link', validators=[InputRequired(), Length(max=256)])
