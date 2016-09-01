@@ -187,6 +187,7 @@ def events_manage(event_id):
     event_form = EventForm(obj=event)
     if event_form.validate_on_submit():
         event_form.populate_obj(event)
+        db.session.commit()
         return redirect(url_for('.events_detail', event_id=event_id))
     return render_template('events/manage.html', event=event, event_form=event_form)
 
