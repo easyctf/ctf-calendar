@@ -4,3 +4,5 @@
 .env
 .secret_key
 npm-debug.log
+.coverage
+.cache
