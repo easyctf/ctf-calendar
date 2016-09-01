@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, redirect, url_for
+from flask import Blueprint, render_template, redirect, url_for, send_file
 from flask_login import current_user, login_required, login_user, logout_user
 
 from forms import LoginForm, RegisterForm
@@ -37,6 +37,12 @@ def register():
 def logout():
     logout_user()
     return redirect(url_for('base.index'))
+
+
+@blueprint.route('/avatar/<int:user_id>')
+def user_avatar(user_id):
+    user = User.query.get_or_404(user_id)
+    return send_file('static/images/user.jpg')
 
 
 @blueprint.route('/profile', methods=['GET'])
