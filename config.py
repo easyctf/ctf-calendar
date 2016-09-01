@@ -5,6 +5,9 @@ from dotenv import load_dotenv, find_dotenv
 
 load_dotenv(find_dotenv())
 
+EVENT_LIST_PAGE_SIZE = 25
+USER_LIST_PAGE_SIZE = 50
+
 
 class CalendarConfig:
     def __init__(self, app_root=None, testing=False):

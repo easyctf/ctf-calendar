@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta
+from functools import partial
 
 from flask_login import current_user, LoginManager
 from flask_oauthlib.provider import OAuth2Provider
@@ -92,17 +93,29 @@ class Event(db.Model):
     approved = db.Column(db.Boolean, default=False)
     title = db.Column(db.Unicode(length=256))
     start_time = db.Column(db.Integer, index=True)
-    duration = db.Column(db.Float)
+    duration = db.Column(db.Float)  # in hours
     description = db.Column(db.UnicodeText)
     link = db.Column(db.Unicode(length=256))
     removed = db.Column(db.Boolean, default=False)
 
     # OAuth2 stuff
-    client_id = db.Column(db.String(40), unique=True, default=util.generate_string(16))
-    client_secret = db.Column(db.String(55), unique=True, index=True, nullable=False, default=util.generate_string(32))
+    client_id = db.Column(db.String(40), unique=True, default=partial(util.generate_string, 16))
+    client_secret = db.Column(db.String(55), unique=True, index=True, nullable=False, default=partial(util.generate_string, 32))
     is_confidential = db.Column(db.Boolean, default=True)
     _redirect_uris = db.Column(db.Text)
     _default_scopes = db.Column(db.Text)
+
+    @property
+    def formatted_start_time(self):
+        return util.isoformat(self.start_time)
+
+    @hybrid_property
+    def end_time(self):
+        return self.start_time + self.duration * 60
+
+    @property
+    def formatted_end_time(self):
+        return util.isoformat(self.end_time)
 
     @property
     def client_type(self):
