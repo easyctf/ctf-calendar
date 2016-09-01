@@ -13,6 +13,7 @@ passlib
 pathlib
 psycopg2
 pymysql
+pytest
 python-dotenv
 sqlalchemy
 wtforms
