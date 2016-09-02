@@ -21,11 +21,13 @@
                             <span id="email">{{ user.email }}</span>
                         </a>
                     </div>
-                    <div>
-                        <i class="fa fa-fw fa-clock-o"></i>
-                        Joined
-                        <time data-livestamp="{{ user.joined.strftime('%s') }}"></time>
-                    </div>
+                    {% if user.joined %}
+                        <div>
+                            <i class="fa fa-fw fa-clock-o"></i>
+                            Joined
+                            <time data-livestamp="{{ user.joined.strftime('%s') }}"></time>
+                        </div>
+                    {% endif %}
                 </div>
             </div>
         </div>
@@ -58,7 +60,9 @@
                             <tbody>
                             {% for event in user.events %}
                                 <tr id="event_{{ event.id }}">
-                                    <td><a href="{{ url_for('events.events_detail', event_id=event.id) }}">{{ event.title }}</a></td>
+                                    <td>
+                                        <a href="{{ url_for('events.events_detail', event_id=event.id) }}">{{ event.title }}</a>
+                                    </td>
                                     <td>{{ event.description }}</td>
                                     <td><span data-livestamp="{{ event.start_time }}"></span></td>
                                     <td>{{ event.duration|duration('hour') }}</td>
