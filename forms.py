@@ -48,10 +48,18 @@ class RegisterForm(Form):
             raise ValidationError('Username taken!')
 
 
+class ForgotForm(Form):
+    email = StringField('Email', validators=[InputRequired()])
+
+    def validate_email(self, field):
+        if not util.validate_email_format(field.data):
+            raise ValidationError('Invalid email')
+
+
 class EventForm(Form):
     title = StringField('Title', validators=[InputRequired(), Length(max=256)])
     start_time = IntegerField('Start Time (UNIX Time)', validators=[InputRequired(), NumberRange(min=0, max=2147483647,
-                                                                                     message='Start time must be between 0 and 2147483647!')])
+                                                                                                 message='Start time must be between 0 and 2147483647!')])
     duration = FloatField('Duration (Hours)', validators=[InputRequired(), NumberRange(min=0, max=2147483647,
                                                                                        message='Duration must be between 0 and 2147483647!')])
     description = StringField('Description', widget=TextArea(), validators=[InputRequired(), Length(max=1024)])

@@ -2,7 +2,7 @@ from flask import abort, Blueprint, render_template, redirect, url_for, send_fil
 from flask_login import current_user, login_required, login_user, logout_user
 
 import config
-from forms import LoginForm, RegisterForm
+from forms import LoginForm, RegisterForm, ForgotForm
 from models import db
 from models import login_manager, User
 
@@ -44,6 +44,14 @@ def logout():
 def user_avatar(user_id):
     user = User.query.get_or_404(user_id)
     return send_file('static/images/user.jpg')
+
+
+@blueprint.route('/forgot', methods=['GET', 'POST'])
+def user_password_forgot():
+    forgot_form = ForgotForm()
+    if forgot_form.validate_on_submit():
+        return render_template('users/forgot.html', check_your_email=True)
+    return render_template('users/forgot.html', forgot_form=forgot_form)
 
 
 @blueprint.route('/profile', methods=['GET'])

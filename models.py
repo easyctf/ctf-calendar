@@ -209,6 +209,13 @@ class Token(db.Model):
             return self._scopes.split()
         return []
 
+class PasswordResetToken(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    active = db.Column(db.Boolean)
+    token = db.Column(db.String, default=partial(util.generate_string, 16))
+    email = db.Column(db.String)
+    expire = db.Column(db.Integer)
+
 
 def get_current_user():
     if current_user:
