@@ -100,7 +100,8 @@ class Event(db.Model):
 
     # OAuth2 stuff
     client_id = db.Column(db.String(40), unique=True, default=partial(util.generate_string, 16))
-    client_secret = db.Column(db.String(55), unique=True, index=True, nullable=False, default=partial(util.generate_string, 32))
+    client_secret = db.Column(db.String(55), unique=True, index=True, nullable=False,
+                              default=partial(util.generate_string, 32))
     is_confidential = db.Column(db.Boolean, default=True)
     _redirect_uris = db.Column(db.Text)
     _default_scopes = db.Column(db.Text)
@@ -208,6 +209,14 @@ class Token(db.Model):
         if self._scopes:
             return self._scopes.split()
         return []
+
+
+class PasswordResetToken(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    active = db.Column(db.Boolean)
+    token = db.Column(db.String, default=partial(util.generate_string, 16))
+    email = db.Column(db.String)
+    expire = db.Column(db.DateTime)
 
 
 def get_current_user():

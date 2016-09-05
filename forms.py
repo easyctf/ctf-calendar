@@ -6,7 +6,8 @@ from wtforms.validators import *
 from wtforms.widgets import TextArea
 
 import util
-from models import User
+from datetime import datetime
+from models import User, PasswordResetToken
 
 
 class LoginForm(Form):
@@ -48,10 +49,31 @@ class RegisterForm(Form):
             raise ValidationError('Username taken!')
 
 
+class PasswordForgotForm(Form):
+    email = StringField('Email', validators=[InputRequired()])
+
+    def validate_email(self, field):
+        if not util.validate_email_format(field.data):
+            raise ValidationError('Invalid email')
+
+
+class PasswordResetForm(Form):
+    code = HiddenField('Code', validators=[InputRequired()])
+    password = PasswordField('New Password', validators=[InputRequired()])
+    password_confirm = PasswordField('Confirm Password', validators=[InputRequired(), EqualTo('password', message='Passwords must match.')])
+
+    def validate_code(self, field):
+        token = PasswordResetToken.query.filter_by(token=field.data, active=True).first()
+        if not token:
+            raise ValidationError('Invalid code')
+        if datetime.now() > token.expire:
+            raise ValidationError('Invalid code')
+
+
 class EventForm(Form):
     title = StringField('Title', validators=[InputRequired(), Length(max=256)])
     start_time = IntegerField('Start Time (UNIX Time)', validators=[InputRequired(), NumberRange(min=0, max=2147483647,
-                                                                                     message='Start time must be between 0 and 2147483647!')])
+                                                                                                 message='Start time must be between 0 and 2147483647!')])
     duration = FloatField('Duration (Hours)', validators=[InputRequired(), NumberRange(min=0, max=2147483647,
                                                                                        message='Duration must be between 0 and 2147483647!')])
     description = StringField('Description', widget=TextArea(), validators=[InputRequired(), Length(max=1024)])
