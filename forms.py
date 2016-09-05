@@ -52,6 +52,18 @@ class RegisterForm(Form):
 class PasswordForgotForm(Form):
     email = StringField('Email', validators=[InputRequired()])
 
+    def __init__(self):
+        super(PasswordForgotForm, self).__init__()
+        self._user = None
+        self._user_cached = False
+
+    @property
+    def user(self):
+        if not self._user_cached:
+            self._user = User.query.filter(func.lower(User.email) == func.lower(self.email.data)).first()
+            self._user_cached = True
+        return self._user
+
     def validate_email(self, field):
         if not util.validate_email_format(field.data):
             raise ValidationError('Invalid email')

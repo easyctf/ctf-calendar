@@ -4,7 +4,7 @@ import requests
 from flask import abort, Blueprint, render_template, redirect, url_for, send_file, request
 from flask import current_app as app
 from flask_login import current_user, login_required, login_user, logout_user
-from sqlalchemy import func, and_
+from sqlalchemy import func
 
 import config
 import util
@@ -56,22 +56,23 @@ def user_avatar(user_id):
 def user_password_forgot():
     forgot_form = PasswordForgotForm()
     if forgot_form.validate_on_submit():
-        user = User.query.filter(func.lower(User.email) == func.lower(forgot_form.email.data)).first()
+        user = forgot_form.user
         if user is not None:
             token = PasswordResetToken.query.filter(
-                and_(func.lower(PasswordResetToken.email) == func.lower(forgot_form.email.data),
-                     PasswordResetToken.active == True)).first()
+                (func.lower(PasswordResetToken.email) == forgot_form.email.data.lower()) &
+                (PasswordResetToken.active is True)
+            ).first()
             if token:
                 token.token = util.generate_string(16)
                 token.expire = datetime.now() + timedelta(days=1)
             else:
                 token = PasswordResetToken(active=True, email=forgot_form.email.data,
                                            expire=datetime.now() + timedelta(days=1))
-            db.session.add(token)
+                db.session.add(token)
             db.session.commit()
             url = "http://%s/password/reset/%s" % (request.host, token.token)
             requests.post('https://api.mailgun.net/v3/%s/messages' % app.config['MAILGUN_DOMAIN'],
-                              auth=('api', app.config['MAILGUN_API_KEY']), data={
+                          auth=('api', app.config['MAILGUN_API_KEY']), data={
                     "from": "CTF Calendar Admin <team@easyctf.com>",
                     "to": forgot_form.email.data,
                     "subject": "CTF Calendar Password Reset",
