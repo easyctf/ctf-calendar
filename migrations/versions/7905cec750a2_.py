@@ -21,7 +21,7 @@ def upgrade():
     sa.Column('active', sa.Boolean(), nullable=True),
     sa.Column('token', sa.String(), nullable=True),
     sa.Column('email', sa.String(), nullable=True),
-    sa.Column('expire', sa.Integer(), nullable=True),
+    sa.Column('expire', sa.DateTime(), nullable=True),
     sa.PrimaryKeyConstraint('id')
     )
     ### end Alembic commands ###
