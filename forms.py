@@ -6,7 +6,6 @@ from wtforms.validators import *
 from wtforms.widgets import TextArea
 
 import util
-from datetime import datetime
 from models import User, PasswordResetToken
 
 
@@ -60,7 +59,7 @@ class PasswordForgotForm(Form):
     @property
     def user(self):
         if not self._user_cached:
-            self._user = User.query.filter(func.lower(User.email) == func.lower(self.email.data)).first()
+            self._user = User.query.filter(func.lower(User.email) == self.email.data.lower()).first()
             self._user_cached = True
         return self._user
 
@@ -70,14 +69,10 @@ class PasswordForgotForm(Form):
 
 
 class PasswordResetForm(Form):
-    code = HiddenField('Code', validators=[InputRequired()])
-    password = PasswordField('New Password', validators=[InputRequired()])
-    password_confirm = PasswordField('Confirm Password', validators=[InputRequired(), EqualTo('password', message='Passwords must match.')])
-
-    def validate_code(self, field):
-        token = PasswordResetToken.query.filter_by(token=field.data, active=True).first()
-        if not token or datetime.now() > token.expire:
-            raise ValidationError('Invalid code')
+    password = PasswordField('New Password', validators=[InputRequired(), Length(min=8, max=56,
+                                                                                 message='Password must be between 8 and 56 characters long.')])
+    password_confirm = PasswordField('Confirm Password',
+                                     validators=[InputRequired(), EqualTo('password', message='Passwords must match.')])
 
 
 class EventForm(Form):

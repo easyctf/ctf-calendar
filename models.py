@@ -212,11 +212,18 @@ class Token(db.Model):
 
 
 class PasswordResetToken(db.Model):
+    __tablename__ = 'password_reset_tokens'
     id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    user = db.relationship('User', backref=db.backref('password_reset_tokens', lazy='dynamic'), lazy='joined')
     active = db.Column(db.Boolean)
-    token = db.Column(db.String, default=partial(util.generate_string, 16))
-    email = db.Column(db.String)
+    token = db.Column(db.String(length=16), default=partial(util.generate_string, 16))
+    email = db.Column(db.Unicode(length=128))
     expire = db.Column(db.DateTime)
+
+    @property
+    def expired(self):
+        return datetime.now() >= self.expire
 
 
 def get_current_user():
