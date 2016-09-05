@@ -214,7 +214,7 @@ class Token(db.Model):
 class PasswordResetToken(db.Model):
     __tablename__ = 'password_reset_tokens'
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id', name='pwd_reset_token_user_id_fk'))
     user = db.relationship('User', backref=db.backref('password_reset_tokens', lazy='dynamic'), lazy='joined')
     active = db.Column(db.Boolean)
     token = db.Column(db.String(length=16), default=partial(util.generate_string, 16))
