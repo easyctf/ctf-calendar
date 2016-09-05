@@ -6,7 +6,7 @@ from wtforms.validators import *
 from wtforms.widgets import TextArea
 
 import util
-from models import User, PasswordResetToken
+from models import User
 
 
 class LoginForm(Form):
