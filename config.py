@@ -23,6 +23,7 @@ class CalendarConfig:
         self.TEMPLATES_AUTO_RELOAD = True
 
         self.MAILGUN_DOMAIN = os.getenv('MAILGUN_DOMAIN', '')
+        self.MAILGUN_API_KEY = os.getenv('MAILGUN_API_KEY', '')
 
         if testing:
             self.TESTING = True

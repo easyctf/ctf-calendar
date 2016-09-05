@@ -64,9 +64,7 @@ class PasswordResetForm(Form):
 
     def validate_code(self, field):
         token = PasswordResetToken.query.filter_by(token=field.data, active=True).first()
-        if not token:
-            raise ValidationError('Invalid code')
-        if datetime.now() > token.expire:
+        if not token or datetime.now() > token.expire:
             raise ValidationError('Invalid code')
 
 
