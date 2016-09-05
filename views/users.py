@@ -85,8 +85,14 @@ def user_password_forgot():
 def user_password_reset(code):
     reset_form = PasswordResetForm()
     if reset_form.validate_on_submit():
-        # TODO
-        pass
+        token = PasswordResetToken.query.filter_by(token=reset_form.code.data).first()
+        user = User.query.filter(func.lower(User.email) == func.lower(token.email)).first()
+        user.password = reset_form.password.data
+        token.active = False
+        db.session.add(user)
+        db.session.add(token)
+        db.session.commit()
+        return render_template('users/reset.html', password_reset=True)
     return render_template('users/reset.html', code=code, reset_form=reset_form)
 
 
