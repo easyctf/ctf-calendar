@@ -100,7 +100,8 @@ class Event(db.Model):
 
     # OAuth2 stuff
     client_id = db.Column(db.String(40), unique=True, default=partial(util.generate_string, 16))
-    client_secret = db.Column(db.String(55), unique=True, index=True, nullable=False, default=partial(util.generate_string, 32))
+    client_secret = db.Column(db.String(55), unique=True, index=True, nullable=False,
+                              default=partial(util.generate_string, 32))
     is_confidential = db.Column(db.Boolean, default=True)
     _redirect_uris = db.Column(db.Text)
     _default_scopes = db.Column(db.Text)
@@ -208,6 +209,21 @@ class Token(db.Model):
         if self._scopes:
             return self._scopes.split()
         return []
+
+
+class PasswordResetToken(db.Model):
+    __tablename__ = 'password_reset_tokens'
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id', name='pwd_reset_token_user_id_fk'))
+    user = db.relationship('User', backref=db.backref('password_reset_tokens', lazy='dynamic'), lazy='joined')
+    active = db.Column(db.Boolean)
+    token = db.Column(db.String(length=16), default=partial(util.generate_string, 16))
+    email = db.Column(db.Unicode(length=128))
+    expire = db.Column(db.DateTime)
+
+    @property
+    def expired(self):
+        return datetime.now() >= self.expire
 
 
 def get_current_user():

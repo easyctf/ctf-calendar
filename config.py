@@ -22,6 +22,9 @@ class CalendarConfig:
         self.SQLALCHEMY_TRACK_MODIFICATIONS = False
         self.TEMPLATES_AUTO_RELOAD = True
 
+        self.MAILGUN_DOMAIN = os.getenv('MAILGUN_DOMAIN', '')
+        self.MAILGUN_API_KEY = os.getenv('MAILGUN_API_KEY', '')
+
         if testing:
             self.TESTING = True
             self.WTF_CSRF_ENABLED = False

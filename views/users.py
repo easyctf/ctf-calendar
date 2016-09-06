@@ -1,9 +1,13 @@
-from flask import abort, Blueprint, render_template, redirect, url_for, send_file
+from datetime import datetime, timedelta
+
+import requests
+from flask import abort, Blueprint, render_template, redirect, url_for, send_file, request
+from flask import current_app as app
 from flask_login import current_user, login_required, login_user, logout_user
 
 import config
-from forms import LoginForm, RegisterForm
-from models import db
+from forms import LoginForm, RegisterForm, PasswordForgotForm, PasswordResetForm
+from models import db, PasswordResetToken
 from models import login_manager, User
 
 login_manager.login_view = '/login'
@@ -44,6 +48,47 @@ def logout():
 def user_avatar(user_id):
     user = User.query.get_or_404(user_id)
     return send_file('static/images/user.jpg')
+
+
+@blueprint.route('/password/forgot', methods=['GET', 'POST'])
+def user_password_forgot():
+    forgot_form = PasswordForgotForm()
+    if forgot_form.validate_on_submit():
+        if forgot_form.user is not None:
+            token = PasswordResetToken(
+                active=True,
+                user=forgot_form.user,
+                email=forgot_form.email.data,
+                expire=datetime.now() + timedelta(days=1),
+            )
+            db.session.add(token)
+            db.session.commit()
+            url = "http://%s/password/reset/%s" % (request.host, token.token)
+            requests.post('https://api.mailgun.net/v3/%s/messages' % app.config['MAILGUN_DOMAIN'],
+                          auth=('api', app.config['MAILGUN_API_KEY']), data={
+                    "from": "CTF Calendar Admin <team@easyctf.com>",
+                    "to": forgot_form.email.data,
+                    "subject": "CTF Calendar Password Reset",
+                    "html": "Click here to reset your password: <a href='%s'>%s</a>" % (url, url)
+                })
+        return render_template('users/forgot.html', check_your_email=True)
+    return render_template('users/forgot.html', forgot_form=forgot_form)
+
+
+@blueprint.route('/password/reset/<string:code>', methods=['GET', 'POST'])
+def user_password_reset(code):
+    token = PasswordResetToken.query.filter_by(token=code, active=True).first()
+    if not token or token.expired or token.email != token.user.email:
+        abort(404)
+
+    reset_form = PasswordResetForm()
+    if reset_form.validate_on_submit():
+        user = token.user
+        user.password = reset_form.password.data
+        token.active = False
+        db.session.commit()
+        return render_template('users/reset.html', password_reset=True)
+    return render_template('users/reset.html', reset_form=reset_form)
 
 
 @blueprint.route('/profile', methods=['GET'])

@@ -48,10 +48,37 @@ class RegisterForm(Form):
             raise ValidationError('Username taken!')
 
 
+class PasswordForgotForm(Form):
+    email = StringField('Email', validators=[InputRequired()])
+
+    def __init__(self):
+        super(PasswordForgotForm, self).__init__()
+        self._user = None
+        self._user_cached = False
+
+    @property
+    def user(self):
+        if not self._user_cached:
+            self._user = User.query.filter(func.lower(User.email) == self.email.data.lower()).first()
+            self._user_cached = True
+        return self._user
+
+    def validate_email(self, field):
+        if not util.validate_email_format(field.data):
+            raise ValidationError('Invalid email')
+
+
+class PasswordResetForm(Form):
+    password = PasswordField('New Password', validators=[InputRequired(), Length(min=8, max=56,
+                                                                                 message='Password must be between 8 and 56 characters long.')])
+    password_confirm = PasswordField('Confirm Password',
+                                     validators=[InputRequired(), EqualTo('password', message='Passwords must match.')])
+
+
 class EventForm(Form):
     title = StringField('Title', validators=[InputRequired(), Length(max=256)])
     start_time = IntegerField('Start Time (UNIX Time)', validators=[InputRequired(), NumberRange(min=0, max=2147483647,
-                                                                                     message='Start time must be between 0 and 2147483647!')])
+                                                                                                 message='Start time must be between 0 and 2147483647!')])
     duration = FloatField('Duration (Hours)', validators=[InputRequired(), NumberRange(min=0, max=2147483647,
                                                                                        message='Duration must be between 0 and 2147483647!')])
     description = StringField('Description', widget=TextArea(), validators=[InputRequired(), Length(max=1024)])
