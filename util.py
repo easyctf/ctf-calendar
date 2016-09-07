@@ -1,10 +1,7 @@
-from __future__ import print_function  # In python 2.7
-
 import datetime
 import os
 import random
 import re
-import sys
 import time
 from functools import wraps, update_wrapper
 
@@ -32,13 +29,11 @@ class RateLimit(object):
         with redis.pipeline() as p:
             p.incr(self.key)
             p.expireat(self.key, self.reset + self.expiration_window)
-            print(str(p.get(self.key)), file=sys.stderr)
-            self.current = p.execute()[0] # min(p.execute()[0], limit)
+            self.current = p.execute()[0]  # min(p.execute()[0], limit)
 
     def increment(self):
         with redis.pipeline() as p:
             p.incr(self.key)
-            print(p.get(self.key), file=sys.stderr)
 
     def decrement(self):
         with redis.pipeline() as p:
@@ -54,13 +49,11 @@ def rate_limit(limit=1, interval=120, send_x_headers=True, scope_func='global'):
             key = 'ratelimit/%s/%s/' % (f.__name__, scope_func())
             rlimit = RateLimit(key, limit, interval, send_x_headers)
             g._view_rate_limit = rlimit
-            print("%s\t%s" % (rlimit.current, rlimit.limit), file=sys.stderr)
             if rlimit.over_limit:
                 raise RateLimitedException("You done fucked.")
             try:
                 result = f(*args, **kwargs)
             except Exception, e:
-                print("An error occurred: %s" % e, file=sys.stderr)
                 rlimit.decrement()
             return result
 
