@@ -26,6 +26,7 @@ class CalendarConfig:
         self.MAILGUN_API_KEY = os.getenv('MAILGUN_API_KEY', '')
 
         if testing:
+            self.DEBUG = True
             self.TESTING = True
             self.WTF_CSRF_ENABLED = False
 

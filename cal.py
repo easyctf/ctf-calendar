@@ -9,7 +9,7 @@ from models import db, login_manager, oauth
 
 app = Flask(__name__, static_url_path='')
 self_path = os.path.dirname(os.path.abspath(__file__))
-app.config.from_object(config.CalendarConfig(app_root=self_path))
+app.config.from_object(config.CalendarConfig(app_root=self_path, testing=os.getenv('STAGING')=='True'))
 db.init_app(app)
 
 login_manager.init_app(app)
