@@ -7,7 +7,7 @@ from flask_login import current_user, login_required
 import config
 from forms import EventForm
 from models import db, Event
-from util import admin_required, isoformat
+from util import admin_required, isoformat, cache, uncache
 
 blueprint = Blueprint('events', __name__, template_folder='templates')
 
@@ -21,6 +21,7 @@ def events_create():
         event_create_form.populate_obj(new_event)
         db.session.add(new_event)
         db.session.commit()
+        uncache(function_name=events_owned.__name__, args=[], uid=current_user.id)
         return redirect(url_for('.events_owned'))
     return render_template('events/create.html', event_create_form=event_create_form)
 
@@ -139,6 +140,7 @@ def events_unapproved(page_number=1):
 
 @blueprint.route('/owned')
 @blueprint.route('/owned/page/<int:page_number>')
+@cache(uid=lambda: current_user.id)
 @login_required
 def events_owned(page_number=1):
     if page_number <= 0:
@@ -199,5 +201,6 @@ def events_remove(event_id):
     if current_user != event.owner:
         abort(403)
     event.removed = True
+    uncache(function_name=events_owned.__name__, args=[], uid=current_user.id)
     db.session.commit()
     return redirect(url_for('.events_owned'))
