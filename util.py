@@ -3,18 +3,19 @@ import os
 import random
 import re
 import time
-from functools import wraps, update_wrapper
+from functools import wraps
 
+import redis
 from flask import abort
 from flask import g
 from flask_login import current_user, login_required
 from passlib.hash import bcrypt
-from redis import from_url
 
-redis = from_url(os.getenv("REDIS_URL"))
+redis_client = redis.from_url(os.getenv("REDIS_URL"))
 
 
-class RateLimitedException(Exception): pass
+class RateLimitedException(Exception):
+    pass
 
 
 class RateLimit(object):
@@ -26,17 +27,17 @@ class RateLimit(object):
         self.limit = limit
         self.interval = interval
         self.send_x_headers = send_x_headers
-        with redis.pipeline() as p:
+        with redis_client.pipeline() as p:
             p.incr(self.key)
             p.expireat(self.key, self.reset + self.expiration_window)
             self.current = p.execute()[0]  # min(p.execute()[0], limit)
 
     def increment(self):
-        with redis.pipeline() as p:
+        with redis_client.pipeline() as p:
             p.incr(self.key)
 
     def decrement(self):
-        with redis.pipeline() as p:
+        with redis_client.pipeline() as p:
             p.decr(self.key)
 
     remaining = property(lambda x: x.limit - x.current)
@@ -45,6 +46,7 @@ class RateLimit(object):
 
 def rate_limit(limit=1, interval=120, send_x_headers=True, scope_func='global'):
     def decorator(f):
+        @wraps(f)
         def rate_limited(*args, **kwargs):
             key = 'ratelimit/%s/%s/' % (f.__name__, scope_func())
             rlimit = RateLimit(key, limit, interval, send_x_headers)
@@ -57,7 +59,7 @@ def rate_limit(limit=1, interval=120, send_x_headers=True, scope_func='global'):
                 rlimit.decrement()
             return result
 
-        return update_wrapper(rate_limited, f)
+        return rate_limited
 
     return decorator
 

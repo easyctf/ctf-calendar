@@ -26,9 +26,10 @@ class CalendarConfig:
         self.MAILGUN_API_KEY = os.getenv('MAILGUN_API_KEY', '')
 
         if testing:
-            self.DEBUG = True
             self.TESTING = True
             self.WTF_CSRF_ENABLED = False
+        elif os.getenv('STAGING') == 'True':
+            self.DEBUG = True
 
     def _load_secret_key(self):
         if 'SECRET_KEY' in os.environ:
