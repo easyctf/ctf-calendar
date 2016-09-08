@@ -3,6 +3,7 @@ from sqlalchemy.engine import reflection
 from sqlalchemy.schema import MetaData, Table, DropTable, ForeignKeyConstraint, DropConstraint
 
 from cal import app as cal_app
+from config import CalendarConfig
 from models import db as cal_db
 
 
@@ -49,6 +50,7 @@ def drop_everything(db):
 @pytest.fixture(scope="session")
 def app(request):
     app = cal_app
+    app.config.from_object(CalendarConfig(testing=True))
     app.config["TESTING"] = True
 
     ctx = app.test_request_context()
