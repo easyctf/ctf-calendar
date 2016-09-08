@@ -49,6 +49,7 @@ def drop_everything(db):
 @pytest.fixture(scope="session")
 def app(request):
     app = cal_app
+    app.config["TESTING"] = True
 
     ctx = app.test_request_context()
     ctx.push()
