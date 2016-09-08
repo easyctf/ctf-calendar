@@ -5,22 +5,39 @@
 {% endblock %}
 
 {% block content %}
-    {% for user in users %}
-        <div id="user_{{ user.id }}">
-            {{ user.id }}
-            <b><a href="{{ url_for('users.users_detail', user_id=user.id) }}">{{ user.username }}</a></b>
-            {% if enabled_actions %}
-                <form></form>
-            {% endif %}
-            <br/>
+    <form class="form-horizontal">
+        <div class="input-group">
+            <input type="text" class="form-control" id="search" name="search" placeholder="Search by username" autocomplete="off"/>
+                <span class="input-group-btn">
+                    <input type="submit" class="btn btn-primary" value="Search Users"/>
+                </span>
         </div>
-    {% endfor %}
+    </form>
 
-    <p>
+    <div class="panel panel-default">
+        <table class="table table-striped table-hover">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>Username</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for user in users %}
+                <tr>
+                    <td>{{ user.id }}</td>
+                    <td><a href="{{ url_for('users.users_detail', user_id=user.id) }}">{{ user.username }}</a></td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <center>
         {% if page_number == 1 %}Prev{% else %}
             <a href="{{ url_for('users.users_list', page_number=page_number - 1) }}">Prev</a>{% endif %}
         / Page <b>{{ page_number }}</b> /
         {% if last_page %}Next{% else %}
             <a href="{{ url_for('users.users_list', page_number=page_number + 1) }}">Next</a>{% endif %}
-    </p>
+    </center>
 {% endblock %}
