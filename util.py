@@ -13,7 +13,7 @@ from redis import from_url
 redis = from_url(os.getenv("REDIS_URL"))
 
 
-def cache(expirein=120, uid=None):
+def cache(expire_in=120, uid=None):
     def decorator(f):
         def cache_function(*args, **kwargs):
             arg_collection = list(args) + sorted(kwargs.items())
@@ -26,7 +26,7 @@ def cache(expirein=120, uid=None):
                 if result is None:
                     result = f(*args, **kwargs)
                     p.set(key, result)
-                    p.expireat(key, int(time.time() + expirein))
+                    p.expireat(key, int(time.time() + expire_in))
                     p.execute()
             return result
 
