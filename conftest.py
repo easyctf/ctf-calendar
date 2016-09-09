@@ -9,7 +9,6 @@ from models import db as cal_db
 def app(request):
     app = cal_app
     app.config.from_object(CalendarConfig(testing=True))
-    app.config["TESTING"] = True
 
     ctx = app.test_request_context()
     ctx.push()
