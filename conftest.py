@@ -28,11 +28,13 @@ def client(app):
 @pytest.fixture(scope="class")
 def db(request, app):
     cal_db.reflect()
+    cal_db.drop_all()
     cal_db.create_all()
 
     def teardown():
         cal_db.session.close_all()
         cal_db.reflect()
+        cal_db.drop_all()
 
     request.addfinalizer(teardown)
     return cal_db
