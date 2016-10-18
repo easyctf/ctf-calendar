@@ -9,7 +9,7 @@ from models import db as cal_db
 def app(request):
     app = cal_app
     app.config.from_object(CalendarConfig(testing=True))
-    app.config["TESTING"] = True
+    app.db = cal_db
 
     ctx = app.test_request_context()
     ctx.push()
@@ -26,14 +26,14 @@ def client(app):
     return app.test_client()
 
 
-@pytest.fixture(scope="class")
+@pytest.fixture(scope="session")
 def db(request, app):
-    cal_db.reflect()
-    cal_db.create_all()
+    with app.app_context():
+        cal_db.create_all()
 
     def teardown():
-        cal_db.session.close_all()
-        cal_db.reflect()
+        cal_db.session.remove()
+        cal_db.drop_all()
 
     request.addfinalizer(teardown)
     return cal_db
