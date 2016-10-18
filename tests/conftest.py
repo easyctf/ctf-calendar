@@ -24,7 +24,7 @@ def client(app):
     return app.test_client()
 
 
-@pytest.fixture(scope="session")
+@pytest.fixture(scope="class")
 def db(request, app):
     cal_db.reflect()
     cal_db.drop_all()

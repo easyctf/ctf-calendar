@@ -14,7 +14,7 @@ blueprint = Blueprint('events', __name__, template_folder='templates')
 
 @blueprint.route('/create', methods=['GET', 'POST'])
 @login_required
-def events_create():
+def create():
     event_create_form = EventForm()
     if event_create_form.validate_on_submit():
         new_event = Event(owner=current_user)

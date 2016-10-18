@@ -3,11 +3,14 @@ from werkzeug.exceptions import Forbidden
 
 import util
 from models import User
-from test_general import USER, ADMIN
+from test_general import USER, ADMIN, admin_user, regular_user
 
 
 class TestUtil:
-    def test_admin_required_pass(self, client, db):
+    def test_admin_required_pass(self, db):
+        db.session.add(admin_user)
+        db.session.commit()
+
         @util.admin_required
         def foo():
             return "bar"
@@ -18,6 +21,8 @@ class TestUtil:
 
     def test_admin_required_fail(self, client, db):
         logout_user()
+        db.session.add(regular_user)
+        db.session.commit()
 
         @util.admin_required
         def foo():
