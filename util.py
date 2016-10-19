@@ -1,6 +1,7 @@
 import datetime
 import random
 import re
+import time
 from functools import wraps
 
 from flask import abort
@@ -9,7 +10,8 @@ from passlib.hash import bcrypt
 
 
 def isoformat(seconds):
-    return datetime.datetime.fromtimestamp(seconds).isoformat() + "Z"
+    offset = time.timezone
+    return datetime.datetime.fromtimestamp(seconds + offset).isoformat() + "Z"
 
 
 def generate_string(length=32, alpha='0123456789abcdef'):

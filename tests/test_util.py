@@ -39,7 +39,7 @@ class TestUtil:
 
     def test_iso_format(self):
         formatted_time = util.isoformat(0)
-        assert formatted_time == "1969-12-31T18:00:00Z"
+        assert formatted_time == "1970-01-01T00:00:00Z"
 
     def test_generate_string(self):
         generated_string = util.generate_string()
