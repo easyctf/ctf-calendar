@@ -5,7 +5,7 @@ from flask import abort, Blueprint, redirect, render_template, url_for, flash
 from flask_login import current_user, login_required
 
 import config
-from forms import EventForm
+from forms import EventCreateForm, EventManageForm
 from models import db, Event
 from util import admin_required, isoformat
 
@@ -15,7 +15,7 @@ blueprint = Blueprint('events', __name__, template_folder='templates')
 @blueprint.route('/create', methods=['GET', 'POST'])
 @login_required
 def events_create():
-    event_create_form = EventForm()
+    event_create_form = EventCreateForm()
     if event_create_form.validate_on_submit():
         new_event = Event(owner=current_user)
         event_create_form.populate_obj(new_event)
@@ -184,11 +184,11 @@ def events_manage(event_id):
     event = Event.query.get_or_404(event_id)
     if current_user != event.owner:
         abort(403)
-    event_form = EventForm(obj=event)
+    event_form = EventManageForm(obj=event)
     if event_form.validate_on_submit():
         event_form.populate_obj(event)
         db.session.commit()
-        return redirect(url_for('.events_detail', event_id=event_id))
+        return redirect(url_for('.events_manage', event_id=event_id))
     return render_template('events/manage.html', event=event, event_form=event_form)
 
 

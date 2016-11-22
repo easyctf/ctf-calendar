@@ -4,6 +4,7 @@ from wtforms import ValidationError
 from wtforms.fields import *
 from wtforms.validators import *
 from wtforms.widgets import TextArea
+from wtforms_components import read_only
 
 import util
 from models import User
@@ -30,10 +31,8 @@ class LoginForm(Form):
 
 class RegisterForm(Form):
     email = StringField('Email', validators=[InputRequired()])
-    username = StringField('Username', validators=[InputRequired(), Length(min=4, max=16,
-                                                                           message='Username must be between 4 and 16 characters long.')])
-    password = PasswordField('Password', validators=[InputRequired(), Length(min=8, max=56,
-                                                                             message='Password must be between 8 and 56 characters long.')])
+    username = StringField('Username', validators=[InputRequired(), Length(min=4, max=16, message='Username must be between 4 and 16 characters long.')])
+    password = PasswordField('Password', validators=[InputRequired(), Length(min=8, max=56, message='Password must be between 8 and 56 characters long.')])
 
     def validate_email(self, field):
         if not util.validate_email_format(field.data):
@@ -69,20 +68,36 @@ class PasswordForgotForm(Form):
 
 
 class PasswordResetForm(Form):
-    password = PasswordField('New Password', validators=[InputRequired(), Length(min=8, max=56,
-                                                                                 message='Password must be between 8 and 56 characters long.')])
-    password_confirm = PasswordField('Confirm Password',
-                                     validators=[InputRequired(), EqualTo('password', message='Passwords must match.')])
+    password = PasswordField('New Password', validators=[InputRequired(), Length(min=8, max=56, message='Password must be between 8 and 56 characters long.')])
+    password_confirm = PasswordField('Confirm Password', validators=[InputRequired(), EqualTo('password', message='Passwords must match.')])
 
 
-class EventForm(Form):
+class EventCreateForm(Form):
     title = StringField('Title', validators=[InputRequired(), Length(max=256)])
-    start_time = IntegerField('Start Time (UNIX Time)', validators=[InputRequired(), NumberRange(min=0, max=2147483647,
-                                                                                                 message='Start time must be between 0 and 2147483647!')])
-    duration = FloatField('Duration (Hours)', validators=[InputRequired(), NumberRange(min=0, max=2147483647,
-                                                                                       message='Duration must be between 0 and 2147483647!')])
+    start_time = IntegerField('Start Time', validators=[InputRequired(), NumberRange(min=0, max=2147483647, message='Start time must be between 0 and 2147483647!')])
+    duration = FloatField('Duration (hours)', validators=[InputRequired(), NumberRange(min=0, max=2147483647, message='Duration must be between 0 and 2147483647!')])
     description = StringField('Description', widget=TextArea(), validators=[InputRequired(), Length(max=1024)])
     link = StringField('Link', validators=[InputRequired(), Length(max=256)])
+
+    def validate_link(self, field):
+        if not any(field.data.startswith(prefix) for prefix in [u'http://', u'https://']):
+            raise ValidationError('Invalid link')
+
+
+class EventManageForm(Form):
+    title = StringField('Title', validators=[InputRequired(), Length(max=256)])
+    start_time = IntegerField('Start Time', validators=[InputRequired(), NumberRange(min=0, max=2147483647, message='Start time must be between 0 and 2147483647!')])
+    duration = FloatField('Duration (hours)', validators=[InputRequired(), NumberRange(min=0, max=2147483647, message='Duration must be between 0 and 2147483647!')])
+    description = StringField('Description', widget=TextArea(), validators=[InputRequired(), Length(max=1024)])
+    link = StringField('Link', validators=[InputRequired(), Length(max=256)])
+    client_id = StringField('Client ID')
+    client_secret = StringField('Client Secret')
+    redirect_uris = StringField('Redirect URIs', widget=TextArea(), validators=[])
+
+    def __init__(self, *args, **kwargs):
+        super(EventManageForm, self).__init__(*args, **kwargs)
+        read_only(self.client_id)
+        read_only(self.client_secret)
 
     def validate_link(self, field):
         if not any(field.data.startswith(prefix) for prefix in [u'http://', u'https://']):
