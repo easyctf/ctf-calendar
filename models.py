@@ -1,5 +1,4 @@
 from datetime import datetime, timedelta
-from functools import partial
 
 from flask_login import current_user, LoginManager
 from flask_oauthlib.provider import OAuth2Provider
@@ -98,8 +97,8 @@ class Event(db.Model):
     removed = db.Column(db.Boolean, default=False)
 
     # OAuth2 stuff
-    client_id = db.Column(db.String(40), unique=True, default=partial(util.generate_string, 16))
-    client_secret = db.Column(db.String(55), unique=True, index=True, nullable=False, default=partial(util.generate_string, 32))
+    client_id = db.Column(db.String(40), unique=True, default=lambda: util.generate_string(16))
+    client_secret = db.Column(db.String(55), unique=True, index=True, nullable=False, default=lambda: util.generate_string(32))
     is_confidential = db.Column(db.Boolean, default=True)
     _redirect_uris = db.Column(db.Text)
     _default_scopes = db.Column(db.Text, default='profile')
@@ -114,7 +113,7 @@ class Event(db.Model):
     def redirect_uris(self):
         'getting'
         if self._redirect_uris:
-            return self._redirect_uris#.split()
+            return self._redirect_uris  # .split()
         return []
 
     @redirect_uris.setter
@@ -129,6 +128,7 @@ class Event(db.Model):
 
     @property
     def default_scopes(self):
+        return ["user"]
         if self._default_scopes:
             return self._default_scopes.split()
         return []
