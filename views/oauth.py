@@ -26,7 +26,7 @@ def errors():
     return render_template('oauth/errors.html', error=error)
 
 
-@blueprint.route('/token')
+@blueprint.route('/token', methods=['GET', 'POST'])
 @oauth.token_handler
 def access_token():
     pass
