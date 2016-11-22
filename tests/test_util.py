@@ -33,8 +33,8 @@ class TestUtil:
 
         login_user(User.get_by_identifier(USER["username"]))
         try:
-            bar = foo()
-        except Exception, e:
+            foo()
+        except Exception as e:
             assert type(e) is Forbidden
 
     def test_iso_format(self):

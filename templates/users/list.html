@@ -16,11 +16,11 @@
         </div>
     {% endfor %}
 
-    <p>
+    <center>
         {% if page_number == 1 %}Prev{% else %}
             <a href="{{ url_for('users.users_list', page_number=page_number - 1) }}">Prev</a>{% endif %}
         / Page <b>{{ page_number }}</b> /
         {% if last_page %}Next{% else %}
             <a href="{{ url_for('users.users_list', page_number=page_number + 1) }}">Next</a>{% endif %}
-    </p>
+    </center>
 {% endblock %}

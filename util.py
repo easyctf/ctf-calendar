@@ -18,6 +18,10 @@ def generate_string(length=32, alpha='0123456789abcdef'):
     return "".join([random.choice(alpha) for x in range(length)])
 
 
+def generate_string_of(length):
+    return lambda: generate_string(length=length)
+
+
 def hash_password(password, rounds=10):
     return bcrypt.encrypt(password, rounds=rounds)
 
