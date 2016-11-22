@@ -20,8 +20,8 @@ def login():
     login_form = LoginForm()
     if login_form.validate_on_submit():
         login_user(login_form.get_user())
-        return redirect(
-            url_for('.profile'))  # TODO: implement safe redirection based on url value for login and register
+        to = request.args.get('next') or url_for('.profile')
+        return redirect(to)
     return render_template('users/login.html', login_form=login_form)
 
 
@@ -34,7 +34,8 @@ def register():
         db.session.add(new_user)
         db.session.commit()
         login_user(new_user)
-        return redirect(url_for('.profile'))
+        to = request.args.get('next') or url_for('.profile')
+        return redirect(to)
     return render_template('users/register.html', register_form=register_form)
 
 
