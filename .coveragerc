@@ -1,0 +1,6 @@
+[report]
+omit =
+    tests/*
+    config.py
+    manage.py
+    models.py

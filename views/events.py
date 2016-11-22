@@ -14,7 +14,7 @@ blueprint = Blueprint('events', __name__, template_folder='templates')
 
 @blueprint.route('/create', methods=['GET', 'POST'])
 @login_required
-def events_create():
+def create():
     event_create_form = EventCreateForm()
     if event_create_form.validate_on_submit():
         new_event = Event(owner=current_user)
@@ -59,8 +59,7 @@ def events_all(page_number=1):
     page_size = config.EVENT_LIST_PAGE_SIZE
     page_offset = (page_number - 1) * page_size
     # Offset + limit for pagination is inefficient; implement page_start based pages if perf issues.
-    events = Event.query.filter_by(approved=True, removed=False).order_by(Event.start_time.desc()) \
-        .offset(page_offset).limit(page_size + 1).all()
+    events = Event.query.filter_by(approved=True, removed=False).order_by(Event.start_time.desc()).offset(page_offset).limit(page_size + 1).all()
     if page_number != 1 and not events:
         abort(404)
 
@@ -80,8 +79,7 @@ def events_upcoming(page_number=1):
 
     page_size = config.EVENT_LIST_PAGE_SIZE
     page_offset = (page_number - 1) * page_size
-    upcoming_events = Event.query.filter_by(approved=True, removed=False).filter(Event.start_time > time.time()) \
-        .order_by(Event.start_time.desc()).offset(page_offset).limit(page_size + 1).all()
+    upcoming_events = Event.query.filter_by(approved=True, removed=False).filter(Event.start_time > time.time()).order_by(Event.start_time.desc()).offset(page_offset).limit(page_size + 1).all()
     if page_number != 1 and not upcoming_events:
         abort(404)
 
@@ -102,8 +100,7 @@ def events_past(page_number=1):
 
     page_size = config.EVENT_LIST_PAGE_SIZE
     page_offset = (page_number - 1) * page_size
-    past_events = Event.query.filter_by(approved=True, removed=False).filter(Event.end_time <= time.time()) \
-        .order_by(Event.start_time.desc()).offset(page_offset).limit(page_size + 1).all()
+    past_events = Event.query.filter_by(approved=True, removed=False).filter(Event.end_time <= time.time()).order_by(Event.start_time.desc()).offset(page_offset).limit(page_size + 1).all()
     if page_number != 1 and not past_events:
         abort(404)
 
@@ -124,8 +121,7 @@ def events_unapproved(page_number=1):
 
     page_size = config.EVENT_LIST_PAGE_SIZE
     page_offset = (page_number - 1) * page_size
-    unapproved_events = Event.query.filter_by(approved=False, removed=False).order_by(Event.start_time.desc()) \
-        .offset(page_offset).limit(page_size + 1).all()
+    unapproved_events = Event.query.filter_by(approved=False, removed=False).order_by(Event.start_time.desc()).offset(page_offset).limit(page_size + 1).all()
     if page_number != 1 and not unapproved_events:
         abort(404)
 
@@ -133,8 +129,7 @@ def events_unapproved(page_number=1):
     if not last_page:
         unapproved_events.pop()
 
-    return render_template('events/list.html', tab='unapproved', page_number=page_number, last_page=last_page,
-                           events=unapproved_events, enabled_actions=['approve'])
+    return render_template('events/list.html', tab='unapproved', page_number=page_number, last_page=last_page, events=unapproved_events, enabled_actions=['approve'])
 
 
 @blueprint.route('/owned')
@@ -146,8 +141,7 @@ def events_owned(page_number=1):
 
     page_size = config.EVENT_LIST_PAGE_SIZE
     page_offset = (page_number - 1) * page_size
-    owned_events = current_user.events.filter_by(removed=False).order_by(Event.start_time.desc()) \
-        .offset(page_offset).limit(page_size + 1).all()
+    owned_events = current_user.events.filter_by(removed=False).order_by(Event.start_time.desc()).offset(page_offset).limit(page_size + 1).all()
     if page_number != 1 and not owned_events:
         abort(404)
 
@@ -155,8 +149,7 @@ def events_owned(page_number=1):
     if not last_page:
         owned_events.pop()
 
-    return render_template('events/list.html', tab='owned', page_number=page_number, last_page=last_page,
-                           events=owned_events, enabled_actions=['manage', 'remove'])
+    return render_template('events/list.html', tab='owned', page_number=page_number, last_page=last_page, events=owned_events, enabled_actions=['manage', 'remove'])
 
 
 @blueprint.route('/<int:event_id>')

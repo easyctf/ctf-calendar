@@ -1,5 +1,5 @@
+import time
 from datetime import datetime, timedelta
-from functools import partial
 
 from flask_login import current_user, LoginManager
 from flask_oauthlib.provider import OAuth2Provider
@@ -22,7 +22,7 @@ class User(db.Model):
     email = db.Column(db.Unicode(length=128), unique=True)
     _password = db.Column('password', db.String(length=60))  # password hash
     admin = db.Column(db.Boolean, default=False)
-    joined = db.Column(db.DateTime, default=datetime.utcnow)
+    _joined = db.Column('joined', db.DateTime, default=datetime.utcnow)
 
     def __eq__(self, other):
         if isinstance(other, User):
@@ -39,6 +39,10 @@ class User(db.Model):
 
     def __repr__(self):
         return '<User %r>' % self.username
+
+    @hybrid_property
+    def joined(self):
+        return int(time.mktime(self._joined.timetuple()))
 
     @property
     def is_active(self):
@@ -99,9 +103,6 @@ class Event(db.Model):
     removed = db.Column(db.Boolean, default=False)
 
     # OAuth2 stuff
-    client_id = db.Column(db.String(40), unique=True, default=partial(util.generate_string, 16))
-    client_secret = db.Column(db.String(55), unique=True, index=True, nullable=False,
-                              default=partial(util.generate_string, 32))
     client_id = db.Column(db.String(40), unique=True, default=lambda: util.generate_string(16))
     client_secret = db.Column(db.String(55), unique=True, index=True, nullable=False, default=lambda: util.generate_string(32))
     is_confidential = db.Column(db.Boolean, default=True)
@@ -227,7 +228,7 @@ class PasswordResetToken(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id', name='pwd_reset_token_user_id_fk'))
     user = db.relationship('User', backref=db.backref('password_reset_tokens', lazy='dynamic'), lazy='joined')
     active = db.Column(db.Boolean)
-    token = db.Column(db.String(length=16), default=partial(util.generate_string, 16))
+    token = db.Column(db.String(length=16), default=util.generate_string_of(16))
     email = db.Column(db.Unicode(length=128))
     expire = db.Column(db.DateTime)
 

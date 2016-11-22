@@ -1,3 +1,6 @@
+html, body {
+    font-family: "Product Sans", Arial, sans-serif;
+}
 
 #timeline #ctf_schedule {
     /* min-height: 400px; */

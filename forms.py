@@ -11,44 +11,46 @@ from models import User
 
 
 class LoginForm(Form):
-    identifier = StringField('Username', validators=[InputRequired()])
-    password = PasswordField('Password', validators=[InputRequired()])
+    identifier = StringField("Username", validators=[InputRequired()])
+    password = PasswordField("Password", validators=[InputRequired()])
 
     def get_user(self, identifier=None):
         return User.get_by_identifier(identifier or self.identifier.data)
 
     def validate_identifier(self, field):
         if self.get_user(field.data) is None:
-            raise ValidationError('Invalid identifier')
+            raise ValidationError("Invalid identifier")
 
     def validate_password(self, field):
         user = self.get_user(self.identifier.data)
         if not user:
             return
         if not user.check_password(field.data):
-            raise ValidationError('Invalid password')
+            raise ValidationError("Invalid password")
 
 
 class RegisterForm(Form):
-    email = StringField('Email', validators=[InputRequired()])
-    username = StringField('Username', validators=[InputRequired(), Length(min=4, max=16, message='Username must be between 4 and 16 characters long.')])
-    password = PasswordField('Password', validators=[InputRequired(), Length(min=8, max=56, message='Password must be between 8 and 56 characters long.')])
+    email = StringField("Email", validators=[InputRequired()])
+    username = StringField("Username", validators=[InputRequired(), Length(min=4, max=16, message="Username must be between 4 and 16 characters long.")])
+    password = PasswordField("Password", validators=[InputRequired(), Length(min=8, max=56, message="Password must be between 8 and 56 characters long.")])
 
-    def validate_email(self, field):
-        if not util.validate_email_format(field.data):
-            raise ValidationError('Invalid email')
-        if User.query.filter(func.lower(User.email) == func.lower(field.data)).count():
-            raise ValidationError('Email taken!')
 
-    def validate_username(self, field):
-        if not util.validate_username_format(field.data):
-            raise ValidationError('Invalid username')
-        if User.query.filter(func.lower(User.username) == func.lower(field.data)).count():
-            raise ValidationError('Username taken!')
+def validate_email(self, field):
+    if not util.validate_email_format(field.data):
+        raise ValidationError("Invalid email")
+    if User.query.filter(func.lower(User.email) == func.lower(field.data)).count():
+        raise ValidationError("Email taken!")
+
+
+def validate_username(self, field):
+    if not util.validate_username_format(field.data):
+        raise ValidationError("Invalid username")
+    if User.query.filter(func.lower(User.username) == func.lower(field.data)).count():
+        raise ValidationError("Username taken!")
 
 
 class PasswordForgotForm(Form):
-    email = StringField('Email', validators=[InputRequired()])
+    email = StringField("Email", validators=[InputRequired()])
 
     def __init__(self):
         super(PasswordForgotForm, self).__init__()
@@ -64,7 +66,7 @@ class PasswordForgotForm(Form):
 
     def validate_email(self, field):
         if not util.validate_email_format(field.data):
-            raise ValidationError('Invalid email')
+            raise ValidationError("Invalid email")
 
 
 class PasswordResetForm(Form):
