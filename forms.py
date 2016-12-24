@@ -5,7 +5,7 @@ from wtforms.fields import *
 from wtforms.validators import *
 from wtforms.widgets import TextArea
 
-import util
+from util.general import validate_email_format, validate_username_format
 from models import User
 
 
@@ -36,13 +36,13 @@ class RegisterForm(Form):
                                                                              message='Password must be between 8 and 56 characters long.')])
 
     def validate_email(self, field):
-        if not util.validate_email_format(field.data):
+        if not validate_email_format(field.data):
             raise ValidationError('Invalid email')
         if User.query.filter(func.lower(User.email) == func.lower(field.data)).count():
             raise ValidationError('Email taken!')
 
     def validate_username(self, field):
-        if not util.validate_username_format(field.data):
+        if not validate_username_format(field.data):
             raise ValidationError('Invalid username')
         if User.query.filter(func.lower(User.username) == func.lower(field.data)).count():
             raise ValidationError('Username taken!')

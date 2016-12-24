@@ -7,7 +7,7 @@ from flask_login import current_user, login_required
 import config
 from forms import EventForm
 from models import db, Event
-from util import admin_required, isoformat
+from util.general import admin_required, isoformat
 
 blueprint = Blueprint('events', __name__, template_folder='templates')
 
