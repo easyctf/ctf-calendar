@@ -9,11 +9,14 @@ Flask-SQLAlchemy
 Flask-WTF
 gunicorn
 jinja2
+git+git://github.com/failedxyz/oauthlib.git@master#egg=oauthlib
 passlib
 pathlib
 psycopg2
 pymysql
 pytest
 python-dotenv
+requests
 sqlalchemy
 wtforms
+wtforms_components

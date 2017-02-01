@@ -1,0 +1,14 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Error
+{% endblock %}
+
+{% block content %}
+    <div class="page-header">
+        <h1>You screwed up.</h1>
+    </div>
+    <p>Here's the details:
+        <pre>{{ error }}</pre>
+    </p>
+{% endblock %}

@@ -1,0 +1,28 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Authorize {{ client.title }}?
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3 col-sm-10 col-sm-offset-1">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h2 class="panel-title">Authorize Application?</h2>
+                </div>
+                <div class="panel-body">
+                    <center>
+                        <div class="jumbotron">
+                            <h2>{{ client.title }}</h2>
+                        </div>
+                        <p>to access your profile?</p>
+                        <form action="" method="POST">
+                            <button name="confirm" value="yes" class="btn btn-lg btn-success">Authorize</button>
+                        </form>
+                    </center>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

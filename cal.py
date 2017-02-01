@@ -15,6 +15,7 @@ db.init_app(app)
 login_manager.init_app(app)
 oauth.init_app(app)
 
+app.register_blueprint(views.api.blueprint, url_prefix='/api')
 app.register_blueprint(views.base.blueprint)
 app.register_blueprint(views.events.blueprint, url_prefix='/events')
 app.register_blueprint(views.oauth.blueprint, url_prefix='/oauth')

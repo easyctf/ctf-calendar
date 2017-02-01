@@ -14,13 +14,19 @@ def authorize(*args, **kwargs):
         client_id = kwargs.get('client_id')
         client = Event.query.filter_by(client_id=client_id).first()
         kwargs['client'] = client
-        return render_template('oauthorize.html', **kwargs)
+        return render_template('oauth/authorize.html', **kwargs)
 
     confirm = request.form.get('confirm', 'no')
     return confirm == 'yes'
 
 
-@blueprint.route('/token')
+@blueprint.route('/errors')
+def errors():
+    error = request.args.get('error', '')
+    return render_template('oauth/errors.html', error=error)
+
+
+@blueprint.route('/token', methods=['GET', 'POST'])
 @oauth.token_handler
 def access_token():
     pass
