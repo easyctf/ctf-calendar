@@ -28,6 +28,8 @@ class CalendarConfig:
         if testing:
             self.TESTING = True
             self.WTF_CSRF_ENABLED = False
+        elif os.getenv('STAGING') == 'True':
+            self.DEBUG = True
 
     def _load_secret_key(self):
         if 'SECRET_KEY' in os.environ:

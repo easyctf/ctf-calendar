@@ -16,6 +16,7 @@ psycopg2
 pymysql
 pytest
 python-dotenv
+redis
 requests
 sqlalchemy
 wtforms

@@ -7,7 +7,7 @@ from flask_login import current_user, login_required
 import config
 from forms import EventCreateForm, EventManageForm
 from models import db, Event
-from util import admin_required, isoformat
+from util import admin_required, isoformat, RateLimitedException, rate_limit
 
 blueprint = Blueprint('events', __name__, template_folder='templates')
 
@@ -17,12 +17,20 @@ blueprint = Blueprint('events', __name__, template_folder='templates')
 def create():
     event_create_form = EventCreateForm()
     if event_create_form.validate_on_submit():
-        new_event = Event(owner=current_user)
-        event_create_form.populate_obj(new_event)
-        db.session.add(new_event)
-        db.session.commit()
+        try:
+            create_event(event_create_form)
+        except RateLimitedException, e:
+            return str(e), 429
         return redirect(url_for('.events_owned'))
     return render_template('events/create.html', event_create_form=event_create_form)
+
+
+@rate_limit(limit=1, interval=24 * 3600, scope_func=lambda: 'user:%s' % current_user.username)
+def create_event(event_create_form):
+    new_event = Event(owner=current_user)
+    event_create_form.populate_obj(new_event)
+    db.session.add(new_event)
+    db.session.commit()
 
 
 @blueprint.route('/list/json')

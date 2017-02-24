@@ -1,12 +1,67 @@
 import datetime
+import os
 import random
 import re
 import time
 from functools import wraps
 
+import redis
 from flask import abort
+from flask import g
 from flask_login import current_user, login_required
 from passlib.hash import bcrypt
+
+redis_client = redis.from_url(os.getenv("REDIS_URL"))
+
+
+class RateLimitedException(Exception):
+    pass
+
+
+class RateLimit(object):
+    expiration_window = 10
+
+    def __init__(self, key_prefix, limit, interval, send_x_headers):
+        self.reset = (int(time.time()) // interval) * interval + interval
+        self.key = key_prefix + str(self.reset)
+        self.limit = limit
+        self.interval = interval
+        self.send_x_headers = send_x_headers
+        with redis_client.pipeline() as p:
+            p.incr(self.key)
+            p.expireat(self.key, self.reset + self.expiration_window)
+            self.current = p.execute()[0]  # min(p.execute()[0], limit)
+
+    def increment(self):
+        with redis_client.pipeline() as p:
+            p.incr(self.key)
+
+    def decrement(self):
+        with redis_client.pipeline() as p:
+            p.decr(self.key)
+
+    remaining = property(lambda x: x.limit - x.current)
+    over_limit = property(lambda x: x.current > x.limit)
+
+
+def rate_limit(limit=1, interval=120, send_x_headers=True, scope_func='global'):
+    def decorator(f):
+        @wraps(f)
+        def rate_limited(*args, **kwargs):
+            key = 'ratelimit/%s/%s/' % (f.__name__, scope_func())
+            rlimit = RateLimit(key, limit, interval, send_x_headers)
+            g._view_rate_limit = rlimit
+            if rlimit.over_limit:
+                raise RateLimitedException("You done fucked.")
+            try:
+                result = f(*args, **kwargs)
+            except Exception, e:
+                rlimit.decrement()
+            return result
+
+        return rate_limited
+
+    return decorator
 
 
 def isoformat(seconds):
